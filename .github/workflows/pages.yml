@@ -2,6 +2,8 @@ name: Deploy site
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "17 3 * * *"   # every day at 03:17 UTC (05:17/06:17 Israel time)
   workflow_dispatch:
 permissions:
   contents: read
@@ -18,8 +20,21 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read the Drive folder
+        run: python scripts/crawl.py data-items.json
+      - name: Build the site
+        run: |
+          python scripts/build.py data-items.json data-docs.json
+          python scripts/tree.py data-items.json data-tree.json
+          python scripts/check.py data-docs.json
+          mkdir -p _site
+          python scripts/assemble.py src data-docs.json data-tree.json _site/index.html
+          cp robots.txt .nojekyll _site/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

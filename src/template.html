@@ -11,6 +11,7 @@
   --mast:#132033; --mast-ink:#F2F5FA; --mast-muted:#A9B6C9; --thread:#3C7BC9;
   --pdf:#B0362C; --pdf-soft:#FBEAE8; --word:#2457A0; --word-soft:#E6EEFA;
   --mark:#FFE58A; --mark-ink:#132033;
+  --wa:#128C4A; --wa-hover:#0E7A40; --wa-ink:#0E7A40;
   --display:"Frank Ruhl Libre","David Libre","Times New Roman",serif;
   --body:"Assistant","Segoe UI",Arial,sans-serif;
   --fs:16px;
@@ -20,13 +21,13 @@
   --accent:#6FA4E6; --accent-soft:#18283E; --accent-ink:#0D141E;
   --mast:#0A1019; --mast-ink:#EEF2F8; --mast-muted:#8E9CB2; --thread:#4F8EDB;
   --pdf:#F08A80; --pdf-soft:#3A1E1C; --word:#8DB6F0; --word-soft:#18283E;
-  --mark:#6B5A12; --mark-ink:#FFF6D2; color-scheme:dark}}
+  --mark:#6B5A12; --mark-ink:#FFF6D2; --wa-ink:#4FD38A; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0D141E; --surface:#141D2A; --ink:#E6EBF2; --muted:#98A5B8; --line:#25324A;
   --accent:#6FA4E6; --accent-soft:#18283E; --accent-ink:#0D141E;
   --mast:#0A1019; --mast-ink:#EEF2F8; --mast-muted:#8E9CB2; --thread:#4F8EDB;
   --pdf:#F08A80; --pdf-soft:#3A1E1C; --word:#8DB6F0; --word-soft:#18283E;
-  --mark:#6B5A12; --mark-ink:#FFF6D2; color-scheme:dark}
+  --mark:#6B5A12; --mark-ink:#FFF6D2; --wa-ink:#4FD38A; color-scheme:dark}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -51,6 +52,13 @@ h1 span{font-weight:500;color:var(--mast-muted);font-size:.5em;display:block;mar
 .logos{display:flex;align-items:center;gap:18px}
 .logos img{height:78px;width:auto;max-width:100%;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
 .a11y{display:flex;gap:6px;align-items:center}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:flex-end}
+.wa{display:inline-flex;align-items:center;gap:8px;background:var(--wa);color:#FFFFFF;font-weight:700;text-decoration:none;padding:8px 14px;border-radius:999px;font-size:.95rem;white-space:nowrap}
+.wa svg{width:20px;height:20px;flex:none}
+.wa:hover{background:var(--wa-hover)}
+.wa-foot{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--wa-ink);text-decoration:none}
+.wa-foot svg{width:18px;height:18px}
+.wa-foot:hover{text-decoration:underline}
 .a11y button{font:inherit;font-weight:700;background:transparent;color:var(--mast-ink);border:1px solid color-mix(in srgb,var(--mast-ink) 30%,transparent);border-radius:8px;min-width:40px;height:36px;cursor:pointer}
 .a11y button:hover{background:color-mix(in srgb,var(--mast-ink) 10%,transparent)}
 .a11y small{color:var(--mast-muted);font-size:.8rem;margin-inline-end:4px}
@@ -167,7 +175,10 @@ footer a{color:var(--muted)}
   .topics button{border:1px solid var(--line);border-radius:999px;background:var(--surface);white-space:nowrap;padding:5px 12px}
 }
 @media (max-width:560px){
-  .side{flex-direction:row-reverse;align-items:center;justify-content:space-between;width:100%}
+  .side{flex-direction:column;align-items:stretch;width:100%}
+  .logos{justify-content:center}
+  .tools{justify-content:space-between}
+  .wa{font-size:.88rem;padding:7px 12px}
   .logos{gap:10px}
   .logos img{height:46px}
   .a11y small{display:none}
@@ -197,10 +208,13 @@ footer a{color:var(--muted)}
         <img src="__L_rab__" alt="סמל הרבנות הצבאית" width="240" height="240">
         <img src="__L_idf__" alt="סמל צבא ההגנה לישראל" width="265" height="240">
       </div>
+      <div class="tools">
+      <a class="wa" href="https://chat.whatsapp.com/DMLsh3eHqD1IAdnLA5AYez" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg><span>הצטרפו לקבוצת הוואטסאפ</span></a>
       <div class="a11y" role="group" aria-label="גודל טקסט">
         <small>גודל טקסט</small>
         <button type="button" id="fsDown" aria-label="הקטנת טקסט">א-</button>
         <button type="button" id="fsUp" aria-label="הגדלת טקסט">א+</button>
+      </div>
       </div>
       </div>
     </div>
@@ -268,6 +282,7 @@ footer a{color:var(--muted)}
   </div>
 </main>
 <footer class="wrap">
+  <a class="wa-foot" href="https://chat.whatsapp.com/DMLsh3eHqD1IAdnLA5AYez" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>לקבלת עדכונים על גיליונות חדשים: קבוצת הוואטסאפ</a><br>
   הקבצים נפתחים ב-Google Drive. <a href="https://drive.google.com/drive/folders/1GNB_nxa9GEel6ThtYqLgL0yHyt8_EMz4" target="_blank" rel="noopener">לתיקייה המקורית</a>
 </footer>
 

@@ -33,6 +33,7 @@ jobs:
           mkdir -p _site
           python scripts/assemble.py src data-docs.json data-tree.json _site/index.html
           cp robots.txt .nojekyll _site/
+          cp static/* _site/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

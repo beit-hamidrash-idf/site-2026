@@ -56,6 +56,14 @@ h1 span{font-weight:500;color:var(--mast-muted);font-size:.5em;display:block;mar
 .wa{display:inline-flex;align-items:center;gap:8px;background:var(--wa);color:#FFFFFF;font-weight:700;text-decoration:none;padding:8px 14px;border-radius:999px;font-size:.95rem;white-space:nowrap}
 .wa svg{width:20px;height:20px;flex:none}
 .wa:hover{background:var(--wa-hover)}
+.fb{display:inline-flex;align-items:center;gap:8px;color:var(--mast-ink);font-weight:700;text-decoration:none;padding:7px 14px;border-radius:999px;font-size:.95rem;white-space:nowrap;border:1px solid color-mix(in srgb,var(--mast-ink) 35%,transparent)}
+.fb svg{width:19px;height:19px;flex:none}
+.fb:hover{background:color-mix(in srgb,var(--mast-ink) 10%,transparent)}
+.fb-foot{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--accent);text-decoration:none;margin-bottom:6px}
+.fb-foot svg{width:18px;height:18px}
+.fb-foot:hover{text-decoration:underline}
+.empty .tell{display:block;margin-top:16px;font-size:.92rem;color:var(--muted)}
+.empty .tell a{font-weight:700}
 .wa-foot{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--wa-ink);text-decoration:none}
 .wa-foot svg{width:18px;height:18px}
 .wa-foot:hover{text-decoration:underline}
@@ -178,7 +186,8 @@ footer a{color:var(--muted)}
   .side{flex-direction:column;align-items:stretch;width:100%}
   .logos{justify-content:center}
   .tools{justify-content:space-between}
-  .wa{font-size:.88rem;padding:7px 12px}
+  .wa,.fb{font-size:.88rem;padding:7px 12px}
+  .tools{justify-content:flex-start}
   .logos{gap:10px}
   .logos img{height:46px}
   .a11y small{display:none}
@@ -209,6 +218,7 @@ footer a{color:var(--muted)}
         <img src="__L_idf__" alt="סמל צבא ההגנה לישראל" width="265" height="240">
       </div>
       <div class="tools">
+      <a class="fb" href="https://forms.gle/Srpsau5Nsxe7kv6t7" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/></svg><span>שליחת משוב</span></a>
       <a class="wa" href="https://chat.whatsapp.com/DMLsh3eHqD1IAdnLA5AYez" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg><span>הצטרפו לקבוצת הוואטסאפ</span></a>
       <div class="a11y" role="group" aria-label="גודל טקסט">
         <small>גודל טקסט</small>
@@ -282,6 +292,7 @@ footer a{color:var(--muted)}
   </div>
 </main>
 <footer class="wrap">
+  <a class="fb-foot" href="https://forms.gle/Srpsau5Nsxe7kv6t7" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/></svg>יש לכם הערה, תיקון או הצעה? שלחו משוב</a><br>
   <a class="wa-foot" href="https://chat.whatsapp.com/DMLsh3eHqD1IAdnLA5AYez" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>לקבלת עדכונים על גיליונות חדשים: קבוצת הוואטסאפ</a><br>
   הקבצים נפתחים ב-Google Drive. <a href="https://drive.google.com/drive/folders/1GNB_nxa9GEel6ThtYqLgL0yHyt8_EMz4" target="_blank" rel="noopener">לתיקייה המקורית</a>
 </footer>
@@ -502,7 +513,7 @@ function render(){
   $("count").innerHTML = `${list.length} ${list.length===1?"מסמך":"מסמכים"}${S.q.trim()?` עבור „${esc(S.q.trim())}”`:""} <span class="crumb">· ${esc(where)}</span>`;
   $("emptyBox").innerHTML = list.length ? "" :
     `<div class="empty"><h3>לא נמצאו מסמכים</h3><p>נסו מילה אחרת, בדקו את הכתיב, או חפשו בכל המאגר.</p>
-     <div class="sugg">${(S.coll||S.topic||S.fmt)?`<button type="button" class="chip" data-reset="1">חיפוש בכל המאגר</button>`:""}${SUGG.map(s=>`<button type="button" class="chip" data-s="${s}">${s}</button>`).join("")}</div></div>`;
+     <div class="sugg">${(S.coll||S.topic||S.fmt)?`<button type="button" class="chip" data-reset="1">חיפוש בכל המאגר</button>`:""}${SUGG.map(s=>`<button type="button" class="chip" data-s="${s}">${s}</button>`).join("")}</div><span class="tell">חסר משהו במאגר? <a href="https://forms.gle/Srpsau5Nsxe7kv6t7" target="_blank" rel="noopener">ספרו לנו</a></span></div>`;
   const rest = list.length - shown.length;
   $("more").hidden = rest <= 0;
   $("more").textContent = `הצגת עוד ${Math.min(rest,PAGE)} (נותרו ${rest})`;
@@ -588,7 +599,7 @@ function renderFolders(){
   if (files.length || !folders.length) parts.push(`${files.length} קבצים`);
   $("fcount").innerHTML = (toks.length ? `תוצאות עבור „${esc(S.q.trim())}”: ` : "") + parts.join(" · ") + (toks.length ? ` <span class="crumb" style="color:var(--muted);font-weight:400">· בתוך ${esc(n.n)}</span>` : "");
   $("fempty").innerHTML = (folders.length || files.length) ? "" :
-    `<div class="empty"><h3>לא נמצא דבר בתיקייה הזו</h3><p>${n.parent?"נסו לחפש בכל המאגר.":"נסו מילה אחרת."}</p>${n.parent?`<div class="sugg"><button type="button" class="chip" data-id="${TREE.id}">חיפוש בכל המאגר</button></div>`:""}</div>`;
+    `<div class="empty"><h3>לא נמצא דבר בתיקייה הזו</h3><p>${n.parent?"נסו לחפש בכל המאגר.":"נסו מילה אחרת."}</p>${n.parent?`<div class="sugg"><button type="button" class="chip" data-id="${TREE.id}">חיפוש בכל המאגר</button></div>`:""}<span class="tell">חסר משהו במאגר? <a href="https://forms.gle/Srpsau5Nsxe7kv6t7" target="_blank" rel="noopener">ספרו לנו</a></span></div>`;
   const rest = files.length - shown.length;
   $("fmore").hidden = rest <= 0;
   $("fmore").textContent = `הצגת עוד ${Math.min(rest,PAGE)} (נותרו ${rest})`;

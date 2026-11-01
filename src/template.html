@@ -83,6 +83,11 @@ dialog#fbDlg::backdrop{background:rgba(8,14,24,.6)}
 .dlg-load{position:absolute;inset:0;display:grid;place-items:center;margin:0;color:#566377}
 .dlg-foot{margin:0;padding:10px 18px;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted)}
 body.dlg-open{overflow:hidden}
+.deep{display:inline-flex;align-items:center;gap:8px;color:var(--mast-ink);font-size:.95rem;cursor:pointer;margin-top:-8px;width:fit-content}
+.deep input{width:18px;height:18px;accent-color:var(--thread);margin:0}
+#deepState{color:var(--mast-muted);font-size:.85rem}
+.snip{margin:7px 0 0;font-size:.9rem;line-height:1.6;color:var(--ink);background:var(--bg);border-radius:8px;padding:6px 10px;overflow-wrap:anywhere}
+.snip b{font-size:.75rem;font-weight:700;color:var(--muted);margin-inline-end:6px;letter-spacing:.02em}
 .wa-foot{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--wa-ink);text-decoration:none}
 .wa-foot svg{width:18px;height:18px}
 .wa-foot:hover{text-decoration:underline}
@@ -93,6 +98,7 @@ body.dlg-open{overflow:hidden}
 .search svg{position:absolute;inset-inline-start:18px;top:50%;transform:translateY(-50%);width:22px;height:22px;color:var(--muted);pointer-events:none}
 #q{width:100%;font:inherit;font-size:1.2rem;padding:16px 54px 16px 96px;border-radius:14px;border:2px solid transparent;background:var(--surface);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.25)}
 #q::placeholder{color:var(--muted)}
+#q::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
 #q:focus{outline:none;border-color:var(--thread)}
 .kbd{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);display:flex;gap:6px;align-items:center}
 .kbd kbd{font-family:var(--body);font-size:.8rem;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;color:var(--muted);background:var(--bg)}
@@ -254,6 +260,7 @@ footer a{color:var(--muted)}
       <input id="q" type="search" autocomplete="off" placeholder="חפשו נושא, שם גיליון או מספר… למשל: מוקצה, חנוכה, 294" aria-describedby="count">
       <div class="kbd"><button type="button" id="clear" hidden>ניקוי</button><kbd>/</kbd></div>
     </form>
+    <label class="deep" for="deep"><input type="checkbox" id="deep" checked> חיפוש גם בתוך תוכן החוברות <span id="deepState" aria-live="polite"></span></label>
     <p class="stats" id="stats"></p>
   </div>
   <div class="thread" aria-hidden="true"></div>
@@ -455,14 +462,67 @@ function inTopic(d){
 }
 
 // ---------- search ----------
-function score(d, toks, numQ){
-  let s = 0;
-  for (const t of toks){
-    if (!d.hay.includes(t)) return -1;
-    if (d.nt.startsWith(t)) s += 6; else if (d.nt.includes(" "+t)) s += 4; else if (d.nt.includes(t)) s += 3; else s += 1;
+// Text of every booklet (text.json, built daily from Drive). Loaded only when someone searches.
+let TEXT = null, textState = "idle"; // idle | loading | ready | failed
+function loadText(){
+  if (textState !== "idle") return;
+  textState = "loading"; showDeep();
+  fetch("text.json").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(arr=>{
+    if (!Array.isArray(arr) || arr.length !== DOCS.length) throw "mismatch";
+    TEXT = arr; textState = "ready"; showDeep(); refresh();
+  }).catch(()=>{ textState = "failed"; showDeep(); });
+}
+function deepOn(){ return $("deep").checked && textState === "ready"; }
+function showDeep(){
+  const el = $("deepState");
+  el.textContent = !$("deep").checked ? "" : textState === "loading" ? "(טוען את תוכן החוברות…)" : textState === "failed" ? "(לא זמין כרגע)" : "";
+}
+// A query word as a regex over the raw booklet text: final letters and geresh/gershayim don't matter.
+const FINAL_OF = {"כ":"ך","מ":"ם","נ":"ן","פ":"ף","צ":"ץ"};
+const reCache = new Map();
+function tokRe(t){
+  if (!reCache.has(t)){
+    const parts = [...t].map(c => FINAL_OF[c] ? `[${c}${FINAL_OF[c]}]` : c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    reCache.set(t, new RegExp(parts.join(`["'״׳]?`), "i"));
   }
+  return reCache.get(t);
+}
+function score(d, toks, numQ){
+  let s = 0, inText = 0;
+  const text = deepOn() ? TEXT[d.i] : "";
+  for (const t of toks){
+    if (d.hay.includes(t)){
+      if (d.nt.startsWith(t)) s += 6; else if (d.nt.includes(" "+t)) s += 4; else if (d.nt.includes(t)) s += 3; else s += 1;
+    } else if (text && tokRe(t).test(text)){ s += 0.5; inText++; }
+    else return -1;
+  }
+  const phrase = text && toks.length > 1 && phraseRe(toks).test(text);
+  // several words found only inside the booklet must appear together, as a phrase
+  if (inText && toks.length > 1 && !d.hay.includes(toks[0]) && !phrase) return -1;
+  if (phrase){ s += 8; inText = inText || 1; }
   if (numQ && d.n === numQ) s += 20;
+  d.inText = inText > 0;
   return s;
+}
+function phraseRe(toks){
+  const k = "\u0001" + toks.join(" ");
+  if (!reCache.has(k)) reCache.set(k, new RegExp(toks.map(t=>tokRe(t).source).join(`[\\s"'״׳\\-–.,:;()]{1,3}`), "i"));
+  return reCache.get(k);
+}
+// A short excerpt around the first place the query appears in the booklet.
+function snippet(d, toks){
+  const text = TEXT[d.i];
+  let m = null;
+  if (toks.length > 1){
+    m = phraseRe(toks).exec(text);
+  }
+  for (const t of toks){ if (m) break; if (!d.hay.includes(t)) m = tokRe(t).exec(text); }
+  if (!m) return "";
+  let a = Math.max(0, m.index - 70), b = Math.min(text.length, m.index + m[0].length + 90);
+  while (a > 0 && !/\s/.test(text[a-1]) && m.index - a < 90) a--;
+  while (b < text.length && !/\s/.test(text[b]) && b - m.index < 200) b++;
+  const part = text.slice(a, b).replace(/\s*\n\s*/g, " · ");
+  return `<p class="snip"><b>בתוך החוברת</b>${a>0?"…":""}${highlight(part, toks)}${b<text.length?"…":""}</p>`;
 }
 function highlight(text, toks){
   if (!toks.length) return esc(text);
@@ -500,6 +560,7 @@ function results(){
     if (S.coll && d.c !== S.coll) continue;
     if (!inTopic(d)) continue;
     if (S.fmt && !d.f[S.fmt]) continue;
+    d.inText = false;
     const sc = toks.length ? score(d, toks, numQ) : 0;
     if (sc < 0) continue;
     out.push([sc, d]);
@@ -531,7 +592,7 @@ function rowHTML(d, toks){
   const files = ["pdf","word"].filter(f=>d.f[f]).map(f=>
     `<a class="f ${f}" href="https://drive.google.com/file/d/${d.f[f]}/view" target="_blank" rel="noopener" aria-label="${esc(d.t)}, פתיחה כ-${f==="pdf"?"PDF":"Word"}">${ICON[f]}${f==="pdf"?"PDF":"Word"}</a>`).join("");
   return `<li class="row">${lead}<div style="min-width:0"><h3 class="title">${highlight(d.t,toks)}</h3>
-    <div class="meta">${path.length?`<span class="path">${path.map(p=>`<span>${highlight(p,toks)}</span>`).join("")}</span>`:""}${d.d?`<span class="date">${esc(d.d)}</span>`:""}</div></div>
+    <div class="meta">${path.length?`<span class="path">${path.map(p=>`<span>${highlight(p,toks)}</span>`).join("")}</span>`:""}${d.d?`<span class="date">${esc(d.d)}</span>`:""}</div>${d.inText?snippet(d,toks):""}</div>
     <div class="files">${files}</div></li>`;
 }
 
@@ -560,7 +621,10 @@ $("emptyBox").addEventListener("click", e=>{
 });
 $("more").addEventListener("click", ()=>{ S.shown += PAGE; render(); });
 let tmr;
+$("q").addEventListener("focus", ()=>{ if ($("deep").checked) loadText(); });
+$("deep").addEventListener("change", ()=>{ if ($("deep").checked) loadText(); showDeep(); S.shown = PAGE; F.shown = PAGE; refresh(); });
 $("q").addEventListener("input", e=>{
+  if ($("deep").checked) loadText();
   clearTimeout(tmr);
   tmr = setTimeout(()=>{ S.q = e.target.value; S.shown = PAGE; F.shown = PAGE; refresh(); }, 90);
 });
@@ -594,10 +658,11 @@ function tileHTML(n, toks, where){
   const sub = n.k.length ? ` · ${n.k.length} תיקיות` : "";
   return `<li><button type="button" class="tile" data-id="${n.id}">${FOLDER_SVG}<b>${highlight(n.n,toks)}</b><small>${n.total} קבצים${sub}</small>${where?`<span class="where">${esc(where)}</span>`:""}</button></li>`;
 }
+const FILE2DOC = {}; DOCS.forEach(d => Object.values(d.f).forEach(id => FILE2DOC[id] = d));
 function fileHTML(f, toks, where){
-  const [name, id] = f, ty = fileType(name);
+  const [name, id] = f, ty = fileType(name), d = FILE2DOC[id];
   return `<li class="row"><div class="num icon ${ty}" aria-hidden="true">${ICON[ty]}</div><div style="min-width:0"><h3 class="title">${highlight(fileLabel(name),toks)}</h3>
-    ${where?`<div class="meta"><span class="path">${where.map(p=>`<span>${highlight(p,toks)}</span>`).join("")}</span></div>`:""}</div>
+    ${where?`<div class="meta"><span class="path">${where.map(p=>`<span>${highlight(p,toks)}</span>`).join("")}</span></div>`:""}${d && f.inText ? snippet(d, toks) : ""}</div>
     <div class="files"><a class="f ${ty}" href="https://drive.google.com/file/d/${id}/view" target="_blank" rel="noopener" aria-label="${esc(fileLabel(name))}, פתיחה">${ICON[ty]}${ty==="pdf"?"PDF":"Word"}</a></div></li>`;
 }
 const byId = {}; (function walk(n){ byId[n.id]=n; n.k.forEach(walk); })(TREE);
@@ -613,7 +678,14 @@ function renderFolders(){
     folders = []; files = [];
     (function walk(x){
       for (const c of x.k){ if (toks.every(t=>c.nn.includes(t))) folders.push(c); walk(c); }
-      for (const f of x.f){ const h = norm(f[0]+" "+relPath(x,n).join(" ")); if (toks.every(t=>h.includes(t))) files.push([f,x]); }
+      for (const f of x.f){
+        const h = norm(f[0]+" "+relPath(x,n).join(" ")), d = FILE2DOC[f[1]];
+        const text = deepOn() && d ? TEXT[d.i] : "";
+        f.inText = false;
+        let ok = toks.every(t => h.includes(t) || (text && tokRe(t).test(text) && (f.inText = true)));
+        if (ok && f.inText && toks.length > 1 && !h.includes(toks[0])) ok = phraseRe(toks).test(text);
+        if (ok) files.push([f,x]);
+      }
     })(n);
     folders = folders.map(c=>tileHTML(c,toks,relPath(c.parent,n).join(" ‹ ")));
     files = files.map(([f,x])=>[f,toks,relPath(x,n)]);

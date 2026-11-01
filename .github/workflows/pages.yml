@@ -23,6 +23,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install text extraction tools
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q poppler-utils catdoc
+          pip install -q python-docx
       - name: Read the Drive folder
         run: python scripts/crawl.py data-items.json
       - name: Build the site
@@ -32,6 +36,7 @@ jobs:
           python scripts/check.py data-docs.json
           mkdir -p _site
           python scripts/assemble.py src data-docs.json data-tree.json _site/index.html
+          python scripts/fulltext.py data-docs.json _site/text.json
           cp robots.txt .nojekyll _site/
           cp static/* _site/
       - uses: actions/upload-pages-artifact@v3

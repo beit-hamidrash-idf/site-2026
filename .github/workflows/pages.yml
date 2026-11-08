@@ -31,11 +31,11 @@ jobs:
         run: python scripts/crawl.py data-items.json
       - name: Build the site
         run: |
-          python scripts/build.py data-items.json data-docs.json
+          python scripts/build.py data-items.json data-docs.json data-new.json
           python scripts/tree.py data-items.json data-tree.json
           python scripts/check.py data-docs.json
           mkdir -p _site
-          python scripts/assemble.py src data-docs.json data-tree.json _site/index.html
+          python scripts/assemble.py src data-docs.json data-tree.json _site/index.html data-new.json
           python scripts/fulltext.py data-docs.json _site/text.json
           cp robots.txt .nojekyll _site/
           cp static/* _site/

@@ -36,9 +36,11 @@ jobs:
           python scripts/check.py data-docs.json
           mkdir -p _site
           python scripts/covers.py data-new.json _site/covers
-          python scripts/assemble.py src data-docs.json data-tree.json _site/index.html data-new.json
+          python scripts/videos.py src/videos.json data-videos.json
+          python scripts/assemble.py src data-docs.json data-tree.json _site/index.html data-new.json data-videos.json
           python scripts/fulltext.py data-docs.json _site/text.json
           cp robots.txt .nojekyll _site/
+          cp data-videos.json _site/videos.json
           cp static/* _site/
       - uses: actions/upload-pages-artifact@v3
         with:

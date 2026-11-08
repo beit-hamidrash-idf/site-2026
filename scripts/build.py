@@ -90,17 +90,17 @@ out = merged
 # or a PDF-only copy next to the PDF+Word entry). Fold those into one row, unless both
 # carry different issue numbers (then they really are two different sheets).
 tkey = lambda r: re.sub(r'[^א-ת0-9a-zA-Z]', '', r['t'])
-merged, seen = [], {}
+merged, seen = [], collections.defaultdict(list)
 for r in out:
     k = (r['c'], tuple(r.get('p', [])), tkey(r))
-    o = seen.get(k)
-    if o and not (o.get('n') and r.get('n') and o['n'] != r['n']):
+    o = next((x for x in seen[k] if not (x.get('n') and r.get('n') and x['n'] != r['n'])), None)
+    if o:
         for fk, fv in r['f'].items():
             o['f'].setdefault(fk, fv)
         for kk in ('n', 'd', 'o'):
             if kk in r and kk not in o: o[kk] = r[kk]
         continue
-    seen[k] = r; merged.append(r)
+    seen[k].append(r); merged.append(r)
 out = merged
 # A sheet filed under two topics may have only its PDF in one of them: give every copy
 # all the formats that exist for that same sheet (same collection, number and title).

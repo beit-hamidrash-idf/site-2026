@@ -123,6 +123,36 @@ body.dlg-open{overflow:hidden}
 
 /* tabs */
 .tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-top:10px;scrollbar-width:thin}
+.topnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--mast) 96%,#000);color:var(--mast-ink);border-bottom:1px solid color-mix(in srgb,var(--mast-ink) 14%,transparent);box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.topnav-in{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:58px}
+.brand{display:inline-flex;align-items:center;gap:10px;color:var(--mast-ink);text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.15rem;white-space:nowrap}
+.brand img{width:34px;height:34px}
+.menu{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:2px}
+.menu > li{position:relative}
+.menu a,.menu button{font:inherit;font-size:.97rem;font-weight:600;color:var(--mast-ink);background:none;border:0;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:8px;white-space:nowrap}
+.menu a:hover,.menu button:hover,.menu .sub-btn[aria-expanded="true"]{background:color-mix(in srgb,var(--mast-ink) 11%,transparent)}
+.menu svg{width:17px;height:17px;flex:none}
+.sub-btn svg{width:14px;height:14px;transition:transform .15s}
+.sub-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.sub{list-style:none;margin:0;padding:6px;position:absolute;top:calc(100% + 6px);inset-inline-start:0;min-width:210px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.28);display:none}
+.has-sub.open .sub{display:block}
+.sub a{display:flex;width:100%;color:var(--ink);font-weight:600;padding:9px 12px}
+.sub a:hover{background:var(--accent-soft);color:var(--accent)}
+.sub .sep{border-top:1px solid var(--line);margin:5px 4px}
+.menu-btn{display:none;font:inherit;font-weight:700;align-items:center;gap:8px;color:var(--mast-ink);background:none;border:1px solid color-mix(in srgb,var(--mast-ink) 30%,transparent);border-radius:9px;padding:7px 12px;cursor:pointer}
+.menu-btn svg{width:20px;height:20px}
+#fresh,#media,.viewbar,#top{scroll-margin-top:76px}
+@media (max-width:1020px){
+  .menu-btn{display:inline-flex}
+  .menu{display:none;position:absolute;top:100%;inset-inline:0;flex-direction:column;align-items:stretch;gap:0;padding:8px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--mast) 96%,#000);border-bottom:1px solid color-mix(in srgb,var(--mast-ink) 14%,transparent);box-shadow:0 18px 30px rgba(0,0,0,.3);max-height:calc(100dvh - 70px);overflow:auto}
+  .topnav.open .menu{display:flex}
+  .menu a,.menu button{width:100%;padding:12px 10px;font-size:1.02rem}
+  .sub-btn{justify-content:space-between}
+  .sub{position:static;box-shadow:none;border:0;background:color-mix(in srgb,var(--mast-ink) 7%,transparent);min-width:0;margin:2px 0 6px}
+  .sub a{color:var(--mast-ink)}
+  .sub a:hover{background:color-mix(in srgb,var(--mast-ink) 11%,transparent);color:var(--mast-ink)}
+  .sub .sep{border-color:color-mix(in srgb,var(--mast-ink) 18%,transparent)}
+}
 .viewbar{display:flex;align-items:center;gap:10px;margin-top:22px;color:var(--muted);font-size:.9rem;font-weight:600}
 .seg.view button{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:.95rem}
 .seg.view svg{width:17px;height:17px}
@@ -319,7 +349,25 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
 </style>
 
 <a class="skip" href="#q">דילוג לחיפוש</a>
-<header class="mast">
+<nav class="topnav" aria-label="תפריט ראשי">
+  <div class="wrap topnav-in">
+    <a class="brand" href="#top" data-top><img src="icon-192.png" alt="" width="34" height="34"><span>בית המדרש להלכה</span></a>
+    <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuList"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>תפריט</button>
+    <ul class="menu" id="menuList">
+      <li id="menuFresh"><a href="#fresh">חדש במאגר</a></li>
+      <li class="has-sub">
+        <button type="button" class="sub-btn" aria-expanded="false" aria-controls="subColl">המאגר<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <ul class="sub" id="subColl"></ul>
+      </li>
+      <li><a href="#media">שיעורים מוקלטים</a></li>
+      <li><a href="https://forms.gle/YJrq9C3aW2BZScJT6" data-fb="ask" target="_blank" rel="noopener">שאלו את הרב</a></li>
+      <li><a href="https://forms.gle/Srpsau5Nsxe7kv6t7" data-fb target="_blank" rel="noopener">משוב</a></li>
+      <li><a href="https://chat.whatsapp.com/DMLsh3eHqD1IAdnLA5AYez" target="_blank" rel="noopener">קבוצת הוואטסאפ</a></li>
+      <li><button type="button" class="menu-search" id="menuSearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg><span>חיפוש</span></button></li>
+    </ul>
+  </div>
+</nav>
+<header class="mast" id="top">
   <div class="collage" aria-hidden="true"><div class="collage-track">
     <img src="hero-01.webp" alt="" loading="eager" decoding="async">
     <img src="hero-02.webp" alt="" loading="eager" decoding="async">
@@ -989,6 +1037,44 @@ document.addEventListener("click", e=>{
 $("fbClose").addEventListener("click", ()=>fbDlg.close());
 fbDlg.addEventListener("click", e=>{ if (e.target === fbDlg) fbDlg.close(); }); // click on the backdrop
 fbDlg.addEventListener("close", ()=>{ document.body.classList.remove("dlg-open"); if (fbOpener) fbOpener.focus(); });
+
+// ---------- top menu ----------
+$("subColl").innerHTML = COLLS.map(c=>`<li><a href="#lview" data-coll="${esc(c.id)}">${esc(c.name)}</a></li>`).join("")
+  + `<li class="sep" role="separator"></li><li><a href="#fview" data-view="folders">לפי תיקיות</a></li>`;
+const topnav = document.querySelector(".topnav"), subLi = document.querySelector(".has-sub");
+function closeMenu(){ topnav.classList.remove("open"); $("menuBtn").setAttribute("aria-expanded","false"); closeSub(); }
+function closeSub(){ subLi.classList.remove("open"); subLi.querySelector(".sub-btn").setAttribute("aria-expanded","false"); }
+$("menuBtn").addEventListener("click", ()=>{
+  const open = !topnav.classList.contains("open");
+  topnav.classList.toggle("open", open); $("menuBtn").setAttribute("aria-expanded", open);
+});
+subLi.querySelector(".sub-btn").addEventListener("click", e=>{
+  const open = !subLi.classList.contains("open");
+  subLi.classList.toggle("open", open); e.currentTarget.setAttribute("aria-expanded", open);
+});
+document.addEventListener("click", e=>{
+  if (!e.target.closest(".has-sub")) closeSub();
+  if (!e.target.closest(".topnav")) closeMenu();
+});
+document.addEventListener("keydown", e=>{ if (e.key==="Escape" && (topnav.classList.contains("open") || subLi.classList.contains("open"))){ closeMenu(); $("menuBtn").focus(); } });
+$("menuList").addEventListener("click", e=>{
+  const a = e.target.closest("a"); if (!a) return;
+  if (a.dataset.coll != null){
+    e.preventDefault();
+    setView("list"); S.coll = a.dataset.coll; S.topic = ""; S.shown = PAGE;
+    renderTabs(); renderTopics(); render();
+    document.querySelector(".viewbar").scrollIntoView({block:"start"});
+  } else if (a.dataset.view){
+    e.preventDefault(); setView(a.dataset.view);
+    document.querySelector(".viewbar").scrollIntoView({block:"start"});
+  }
+  closeMenu();
+});
+document.querySelector(".brand").addEventListener("click", e=>{ e.preventDefault(); window.scrollTo({top:0}); });
+$("menuSearch").addEventListener("click", ()=>{ closeMenu(); window.scrollTo({top:0}); $("q").focus({preventScroll:true}); });
+// hide "חדש במאגר" in the menu while that section is empty
+new MutationObserver(()=>{ $("menuFresh").hidden = $("fresh").hidden; }).observe($("fresh"), {attributes:true, attributeFilter:["hidden"]});
+$("menuFresh").hidden = $("fresh").hidden;
 
 // text size
 let fs = +(load("bm-fs")||16);

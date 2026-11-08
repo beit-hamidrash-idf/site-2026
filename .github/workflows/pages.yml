@@ -26,13 +26,14 @@ jobs:
       - name: Install text extraction tools
         run: |
           sudo apt-get update -q && sudo apt-get install -y -q poppler-utils catdoc
-          pip install -q python-docx
+          pip install -q python-docx pillow
       - name: Read the Drive folder
         run: python scripts/crawl.py data-items.json
       - name: Build the site
         run: |
           python scripts/build.py data-items.json data-docs.json data-new.json
           python scripts/tree.py data-items.json data-tree.json
+          python scripts/foldercovers.py data-tree.json data-docs.json _site/fcovers
           python scripts/check.py data-docs.json
           mkdir -p _site
           python scripts/covers.py data-new.json _site/covers

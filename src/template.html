@@ -47,7 +47,19 @@ a{color:var(--accent)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* masthead */
-.mast{background:var(--mast);color:var(--mast-ink);position:relative}
+.mast{background:var(--mast);color:var(--mast-ink);position:relative;overflow:hidden;isolation:isolate}
+.mast > .wrap,.mast > .thread{position:relative;z-index:1}
+/* collage of real covers and chapter names, tilted behind the masthead */
+.collage{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.collage-track{position:absolute;top:50%;left:50%;width:2240px;display:grid;grid-template-columns:repeat(16,122px);grid-auto-rows:84px;grid-auto-flow:row dense;gap:14px;transform:translate(-50%,-50%) rotate(-8deg)}
+.collage-track img{grid-row:span 2;width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:6px;box-shadow:0 8px 22px rgba(0,0,0,.45)}
+.collage-track span{display:flex;align-items:center;justify-content:center;text-align:center;padding:6px 10px;border-radius:6px;font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.15;text-wrap:balance}
+.collage-track .cw0{background:var(--gold, #C9A227);color:#132033}
+.collage-track .cw1{border:1.5px solid var(--mast-ink);color:var(--mast-ink)}
+.collage-track .cw2{background:var(--thread);color:#FFFFFF}
+.collage::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(to left,color-mix(in srgb,var(--mast) 94%,transparent) 0%,color-mix(in srgb,var(--mast) 84%,transparent) 42%,color-mix(in srgb,var(--mast) 52%,transparent) 100%),
+  linear-gradient(to bottom,color-mix(in srgb,var(--mast) 30%,transparent),transparent 30%,transparent 70%,color-mix(in srgb,var(--mast) 55%,transparent))}
 .mast .wrap{padding-block:34px 30px;display:grid;gap:22px}
 .mast-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
 .eyebrow{font-size:.8rem;letter-spacing:.08em;color:var(--mast-muted);font-weight:600;margin:0 0 4px}
@@ -278,6 +290,9 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
   .topics button{border:1px solid var(--line);border-radius:999px;background:var(--surface);white-space:nowrap;padding:5px 12px}
 }
 @media (max-width:560px){
+  .collage-track{grid-template-columns:repeat(16,92px);grid-auto-rows:64px;gap:10px;width:1660px}
+  .collage-track span{font-size:.85rem;padding:4px 6px}
+  .collage::after{background:color-mix(in srgb,var(--mast) 84%,transparent)}
   .vlist{grid-auto-columns:72%}
   .vnav{display:none}
   .fresh{padding:18px 14px 18px;margin-top:18px}
@@ -296,6 +311,8 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
   .files{grid-column:2}
 }
 @media (prefers-reduced-motion:no-preference){
+  .collage-track{animation:drift 140s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:translate(-50%,-50%) rotate(-8deg)}to{transform:translate(calc(-50% + 160px),-50%) rotate(-8deg)}}
   .row{animation:in .25s ease both}
   @keyframes in{from{transform:translateY(4px)}to{transform:none}}
 }
@@ -303,6 +320,88 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
 
 <a class="skip" href="#q">דילוג לחיפוש</a>
 <header class="mast">
+  <div class="collage" aria-hidden="true"><div class="collage-track">
+    <img src="hero-01.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-02.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">מלאכות שבת</span>
+    <img src="hero-03.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">עירובין</span>
+    <img src="hero-04.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-05.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">מוקצה</span>
+    <img src="hero-06.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">קידוש והבדלה</span>
+    <img src="hero-07.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-08.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">ברכות השחר</span>
+    <img src="hero-09.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">קריאת שמע</span>
+    <img src="hero-10.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-11.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">תפילין</span>
+    <img src="hero-12.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">ציצית</span>
+    <img src="hero-13.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-14.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">ספירת העומר</span>
+    <img src="hero-15.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">בין המצרים</span>
+    <img src="hero-16.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-17.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">חגי תשרי</span>
+    <img src="hero-18.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">בשר וחלב</span>
+    <img src="hero-19.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-20.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">טבילת כלים</span>
+    <img src="hero-21.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">בישולי גויים</span>
+    <img src="hero-22.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-23.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">תרומות ומעשרות</span>
+    <img src="hero-24.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">שמיטה</span>
+    <img src="hero-01.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-02.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">שמירת הלשון</span>
+    <img src="hero-03.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">מזוזה</span>
+    <img src="hero-04.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-05.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">לימוד תורה</span>
+    <img src="hero-06.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">שבת בפעילות מבצעית</span>
+    <img src="hero-07.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-08.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">חמ״ל בשבת</span>
+    <img src="hero-09.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">שניים מקרא ואחד תרגום</span>
+    <img src="hero-10.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-11.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">זמן אמירת סליחות</span>
+    <img src="hero-12.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">נר חנוכה</span>
+    <img src="hero-13.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-14.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">נטילת ידיים</span>
+    <img src="hero-15.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">קריאת התורה</span>
+    <img src="hero-16.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-17.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">ביעור חמץ</span>
+    <img src="hero-18.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">תענית בעת מלחמה</span>
+    <img src="hero-19.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-20.webp" alt="" loading="eager" decoding="async">
+    <span class="cw0">זימון וברכת המזון</span>
+    <img src="hero-21.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">הכנות לשבת</span>
+    <img src="hero-22.webp" alt="" loading="eager" decoding="async">
+    <img src="hero-23.webp" alt="" loading="eager" decoding="async">
+    <span class="cw2">יום העצמאות</span>
+    <img src="hero-24.webp" alt="" loading="eager" decoding="async">
+    <span class="cw1">שבת שטח</span>
+  </div></div>
   <div class="wrap">
     <div class="mast-top">
       <div>

@@ -1039,7 +1039,10 @@ applyFs();
   if (!EPISODES.length){ list.hidden = true; return; }
   $("ecount").textContent = `${EPISODES.length} ${EPISODES.length===1?"פרק":"פרקים"}`;
   const len = s => s ? `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}` : "";
-  const day = d => { const m = /^(\d{4})-(\d\d)-(\d\d)/.exec(d||""); return m ? `${+m[3]}.${+m[2]}.${m[1].slice(2)}` : ""; };
+  const day = d => { // Spotify gives UTC; show the date in Israel time
+    const t = new Date(/T\d\d:\d\d$/.test(d||"") ? d + ":00Z" : d);
+    try { return isNaN(t) ? "" : t.toLocaleDateString("he-IL", {day:"numeric", month:"numeric", year:"2-digit", timeZone:"Asia/Jerusalem"}); } catch(e){ return ""; }
+  };
   const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
   let open = false, cur = "";
   function draw(){

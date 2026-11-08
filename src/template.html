@@ -229,6 +229,17 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
 .vdlg-foot h2{font-family:var(--display);font-size:1.15rem;margin:0;line-height:1.3}
 .vdlg-foot a{font-size:.88rem;font-weight:700;white-space:nowrap}
 .sp{display:block;width:100%;height:152px;border:0;border-radius:12px}
+.elist{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:8px}
+.ebtn{font:inherit;color:var(--ink);width:100%;height:100%;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 10px;align-items:center;text-align:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer;transition:border-color .15s}
+.ebtn:hover{border-color:#1DB954}
+.ebtn[aria-current="true"]{border-color:#1DB954;background:color-mix(in srgb,#1DB954 9%,var(--surface))}
+.ebtn i{grid-row:span 2;width:32px;height:32px;border-radius:50%;background:#1DB954;display:grid;place-items:center}
+.ebtn i svg{width:15px;height:15px;fill:#0B1A10}
+.ebtn[aria-current="true"] i svg{display:none}
+.ebtn[aria-current="true"] i::after{content:"";width:14px;height:12px;background:linear-gradient(90deg,#0B1A10 0 3px,transparent 3px 5.5px,#0B1A10 5.5px 8.5px,transparent 8.5px 11px,#0B1A10 11px 14px)}
+.ebtn b{font-weight:700;font-size:.92rem;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ebtn small{color:var(--muted);font-size:.78rem;font-variant-numeric:tabular-nums}
+.emore{font:inherit;font-size:.9rem;font-weight:700;background:none;border:0;color:var(--accent);cursor:pointer;padding:8px 0 0}
 .tab-media{text-decoration:none;color:var(--accent)}
 .tab-media svg{width:18px;height:18px;flex:none}
 .topics .media-li{margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
@@ -398,9 +409,11 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
 <button type="button" class="vnav next" id="vnext" aria-label="סרטונים נוספים" hidden>‹</button>
 </div>
 <p style="margin-top:8px"><a href="https://www.youtube.com/channel/UCNySKxULy7VBPkZIY5N0_3g/videos" target="_blank" rel="noopener">לערוץ ביוטיוב</a></p>
-<h3>להאזנה בספוטיפיי</h3>
-<p>שיעורי הלכה לחנוכה · <a href="https://open.spotify.com/show/14hwNL6upLWg2VC1Z67pr5" target="_blank" rel="noopener">לכל הפרקים בספוטיפיי</a></p>
-<iframe class="sp" src="https://open.spotify.com/embed/show/14hwNL6upLWg2VC1Z67pr5" title="שיעורי הלכה לחנוכה בספוטיפיי" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+<div class="media-head"><h3>בספוטיפיי</h3><span class="ct" id="ecount"></span></div>
+<iframe class="sp" id="spPlayer" src="https://open.spotify.com/embed/show/14hwNL6upLWg2VC1Z67pr5" title="נגן ספוטיפיי: שיעורי הלכה לחנוכה" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+<ul class="elist" id="elist" aria-label="פרקי הפודקאסט"></ul>
+<button type="button" class="emore" id="emore" hidden></button>
+<p style="margin-top:8px"><a href="https://open.spotify.com/show/14hwNL6upLWg2VC1Z67pr5" target="_blank" rel="noopener">לפודקאסט בספוטיפיי</a></p>
 </section>
 <dialog id="vidDlg" aria-labelledby="vidTitle">
   <div class="vplayer" id="vplayer"></div>
@@ -433,6 +446,7 @@ const DOCS = __DATA__;
 const TREE = __TREE__;
 const NEW = __NEW__;
 const VIDEOS = __VIDEOS__;
+const EPISODES = __SPOTIFY__;
 const COLLS = [
   {id:"", name:"כל המאגר", blurb:"כל הגיליונות, החוברות וההנחיות במקום אחד. בחרו אוסף או נושא, או פשוט התחילו להקליד."},
   {id:"מאגר דפי והגית בו", name:"והגית בו", blurb:"גיליונות הלכה שבועיים, מסודרים לפי נושאים: שבת, מועדים, תפילה וברכות, שמיטה ועוד. רוב הגיליונות זמינים גם ב-PDF וגם ב-Word."},
@@ -918,6 +932,32 @@ applyFs();
   $("vnext").addEventListener("click", ()=>list.scrollBy({left:-step(), behavior:"smooth"}));
   $("vprev").addEventListener("click", ()=>list.scrollBy({left:step(), behavior:"smooth"}));
   list.addEventListener("scroll", sync, {passive:true}); window.addEventListener("resize", sync); sync();
+})();
+
+// ---------- Spotify: every episode of the show; a click loads it into the player ----------
+(function(){
+  const list = $("elist"), more = $("emore"), SHOW = 6;
+  if (!EPISODES.length){ list.hidden = true; return; }
+  $("ecount").textContent = `${EPISODES.length} ${EPISODES.length===1?"פרק":"פרקים"}`;
+  const len = s => s ? `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}` : "";
+  const day = d => { const m = /^(\d{4})-(\d\d)-(\d\d)/.exec(d||""); return m ? `${+m[3]}.${+m[2]}.${m[1].slice(2)}` : ""; };
+  const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+  let open = false, cur = "";
+  function draw(){
+    const shown = open ? EPISODES : EPISODES.slice(0, SHOW);
+    list.innerHTML = shown.map(e=>`<li><button type="button" class="ebtn" data-e="${esc(e.id)}" aria-current="${e.id===cur}"><i>${PLAY}</i><b>${esc(e.t)}</b><small>${[len(e.s), day(e.d)].filter(Boolean).join(" · ")}</small></button></li>`).join("");
+    more.hidden = EPISODES.length <= SHOW;
+    more.textContent = open ? "הצגת פחות" : `הצגת כל ${EPISODES.length} הפרקים`;
+  }
+  list.addEventListener("click", e=>{
+    const b = e.target.closest(".ebtn"); if (!b) return;
+    cur = b.dataset.e; $("spPlayer").src = `https://open.spotify.com/embed/episode/${cur}`;
+    draw();
+    const top = $("spPlayer").getBoundingClientRect().top;
+    if (top < 0 || top > innerHeight - 160) $("spPlayer").scrollIntoView({block:"center", behavior:"smooth"});
+  });
+  more.addEventListener("click", ()=>{ open = !open; draw(); });
+  draw();
 })();
 
 // ---------- new in the library (Drive folder "חדש") ----------

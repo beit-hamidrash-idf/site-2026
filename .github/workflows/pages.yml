@@ -35,6 +35,7 @@ jobs:
           python scripts/tree.py data-items.json data-tree.json
           python scripts/check.py data-docs.json
           mkdir -p _site
+          python scripts/covers.py data-new.json _site/covers
           python scripts/assemble.py src data-docs.json data-tree.json _site/index.html data-new.json
           python scripts/fulltext.py data-docs.json _site/text.json
           cp robots.txt .nojekyll _site/

@@ -1,5 +1,8 @@
 import json, re, sys, collections
 items = json.load(open(sys.argv[1]))
+NEW_FOLDER = 'חדש'  # top-level Drive folder whose files are featured at the top of the page
+new_items = [it for it in items if it['path'][:1] == [NEW_FOLDER]]
+items = [it for it in items if it['path'][:1] != [NEW_FOLDER]]
 SKIP_EXT = ('.txt', '.lnk')
 def fmt_of(name):
     n = name.lower().strip()
@@ -83,7 +86,50 @@ for r in out:
         continue
     byk[k] = r; merged.append(r)
 out = merged
+# The same sheet sometimes sits twice in one folder (a Word copy without the issue number,
+# or a PDF-only copy next to the PDF+Word entry). Fold those into one row, unless both
+# carry different issue numbers (then they really are two different sheets).
+tkey = lambda r: re.sub(r'[^א-ת0-9a-zA-Z]', '', r['t'])
+merged, seen = [], {}
+for r in out:
+    k = (r['c'], tuple(r.get('p', [])), tkey(r))
+    o = seen.get(k)
+    if o and not (o.get('n') and r.get('n') and o['n'] != r['n']):
+        for fk, fv in r['f'].items():
+            o['f'].setdefault(fk, fv)
+        for kk in ('n', 'd', 'o'):
+            if kk in r and kk not in o: o[kk] = r[kk]
+        continue
+    seen[k] = r; merged.append(r)
+out = merged
+# A sheet filed under two topics may have only its PDF in one of them: give every copy
+# all the formats that exist for that same sheet (same collection, number and title).
+fmts = collections.defaultdict(dict)
+for r in out:
+    if r.get('n'):
+        for fk, fv in r['f'].items(): fmts[(r['c'], r['n'], tkey(r))].setdefault(fk, fv)
+for r in out:
+    if r.get('n'):
+        for fk, fv in fmts[(r['c'], r['n'], tkey(r))].items(): r['f'].setdefault(fk, fv)
 print(len(out), 'docs', file=sys.stderr)
 print(collections.Counter(d['c'] for d in out), file=sys.stderr)
 print(collections.Counter(len(d['f']) for d in out), file=sys.stderr)
 json.dump(out, open(sys.argv[2], 'w'), ensure_ascii=False, separators=(',', ':'))
+# Featured "new" files: one card per document, PDF and Word side by side.
+def new_title(name):
+    b = heb(re.sub(r"(?<![א-ת])ה'(?=ת)", 'ה׳', base(name)))
+    parts = [x.strip() for x in b.split('|') if x.strip()]
+    series = parts.pop(0) if len(parts) > 1 else ''
+    return series, ' · '.join(parts) or b
+feat = collections.OrderedDict()
+for it in sorted(new_items, key=lambda x: x['name']):
+    if it['folder'] or it['name'].lower().endswith(SKIP_EXT): continue
+    m = re.search(r'/d/([^/]+)', it['url'])
+    if not m: continue
+    series, title = new_title(it['name'])
+    d = feat.setdefault(re.sub(r'[^א-ת0-9a-zA-Z]', '', series + title), {'t': title, 's': series, 'f': {}})
+    d['f'].setdefault(fmt_of(it['name']), m.group(1))
+feat = [{k: v for k, v in d.items() if v} for d in feat.values()]
+print(len(feat), 'new', file=sys.stderr)
+if len(sys.argv) > 3:
+    json.dump(feat, open(sys.argv[3], 'w'), ensure_ascii=False, separators=(',', ':'))

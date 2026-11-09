@@ -41,6 +41,7 @@ jobs:
           python scripts/spotify.py src/spotify.json data-spotify.json
           python scripts/assemble.py src data-docs.json data-tree.json _site/index.html data-new.json data-videos.json data-spotify.json
           python scripts/fulltext.py data-docs.json _site/text.json
+          python scripts/zmanim.py data-items.json _site/zmanim.json || echo "zmanim table not updated"
           cp robots.txt .nojekyll _site/
           cp data-videos.json _site/videos.json
           cp data-spotify.json _site/spotify.json

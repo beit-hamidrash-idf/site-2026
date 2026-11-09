@@ -153,6 +153,55 @@ body.dlg-open{overflow:hidden}
   .sub a:hover{background:color-mix(in srgb,var(--mast-ink) 11%,transparent);color:var(--mast-ink)}
   .sub .sep{border-color:color-mix(in srgb,var(--mast-ink) 18%,transparent)}
 }
+.zm-strip{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px 14px;box-shadow:0 6px 20px rgba(19,32,51,.07)}
+.zm-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 16px;margin-bottom:10px}
+.zm-strip h2,.zm-page h2{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:1.45rem;margin:0}
+.zm-strip h2 svg{width:22px;height:22px;color:var(--gold)}
+.zm-date{margin:2px 0 0;color:var(--muted);font-size:.95rem}
+.zm-date b{color:var(--ink);font-weight:700}
+.zm-date.big{font-size:1.05rem;margin:4px 0 14px}
+.zm-all{display:inline-flex;align-items:center;gap:4px;font-weight:700;text-decoration:none;color:var(--accent);padding:6px 4px}
+.zm-all svg{width:17px;height:17px}
+.zm-all:hover{text-decoration:underline}
+.zm-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
+.zm-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.zm-table th,.zm-table td{padding:7px 10px;text-align:center;white-space:nowrap;border-bottom:1px solid var(--line)}
+.zm-table thead th{font-size:.82rem;color:var(--muted);font-weight:700;background:var(--bg);position:sticky;top:0}
+.zm-table tbody th{text-align:start;font-weight:700;font-size:.92rem}
+.zm-table td{font-size:1rem;font-weight:600}
+.zm-mini td{font-size:1.06rem}
+.zm-mini tbody th small{display:block;font-weight:400;color:var(--muted);font-size:.75rem}
+.zm-table td.key-c,.zm-table tr.key td,.zm-table tr.key th{background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.zm-full th:first-child,.zm-full td:first-child,.zm-sh th:first-child{position:sticky;inset-inline-start:0;background:var(--surface);z-index:1;box-shadow:-1px 0 0 var(--line) inset}
+.zm-full thead th:first-child{background:var(--bg)}
+.zm-full tbody tr:hover th,.zm-full tbody tr:hover td{background:var(--accent-soft)}
+.zm-full tr.main th{color:var(--accent)}
+.zm-full thead th small{display:block;font-weight:400;font-size:.72rem}
+.zm-shab{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:.95rem}
+.zm-shab strong{font-family:var(--display);font-size:1.08rem}
+.zm-chip{display:inline-flex;gap:6px;align-items:baseline;background:var(--bg);border-radius:999px;padding:4px 12px;font-variant-numeric:tabular-nums}
+.zm-chip span{color:var(--muted);font-size:.85rem}
+.zm-page{padding-block:22px 60px}
+.zm-back{display:inline-flex;align-items:center;gap:4px;font-weight:700;text-decoration:none;margin-bottom:10px}
+.zm-back svg{width:18px;height:18px}
+.zm-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-bottom:10px}
+.zm-pick{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-weight:600;font-size:.9rem}
+.zm-pick input{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 10px;min-width:0}
+.zm-note{color:var(--muted);font-size:.9rem;margin:0 0 12px}
+.zm-page .zm-scroll{background:var(--surface);border:1px solid var(--line)}
+.zm-shab-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:28px 0 10px}
+.zm-shab-head h3{font-family:var(--display);font-size:1.3rem;margin:0}
+.zm-sh-wrap{max-width:560px}
+.zm-wide{display:none}
+@media (min-width:760px){.zm-wide{display:table}.zm-narrow{display:none}.zm-wide tbody th{min-width:96px}.zm-wide thead th small{display:block;font-weight:400;font-size:.72rem}}
+.zm-src{color:var(--muted);font-size:.85rem;margin-top:16px}
+body.zm-mode > main,body.zm-mode > .mast,body.zm-mode > #media{display:none}
+#zmanim{scroll-margin-top:76px}
+@media (max-width:560px){
+  .zm-strip{padding:14px 12px 12px;border-radius:14px}
+  .zm-table th,.zm-table td{padding:6px 6px}
+  .zm-mini td{font-size:.98rem}
+}
 .viewbar{display:flex;align-items:center;gap:10px;margin-top:22px;color:var(--muted);font-size:.9rem;font-weight:600}
 .seg.view button{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:.95rem}
 .seg.view svg{width:17px;height:17px}
@@ -370,6 +419,7 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
     <a class="brand" href="#top" data-top><img src="icon-192.png" alt="" width="34" height="34"><span>בית המדרש להלכה</span></a>
     <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuList"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>תפריט</button>
     <ul class="menu" id="menuList">
+      <li><a href="#zmanim">זמני היום</a></li>
       <li id="menuFresh"><a href="#fresh">חדש במאגר</a></li>
       <li class="has-sub">
         <button type="button" class="sub-btn" aria-expanded="false" aria-controls="subColl">המאגר<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -503,6 +553,17 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
 </header>
 
 <main class="wrap">
+  <section class="zm-strip" id="zmStrip" hidden aria-labelledby="zmStripH">
+    <div class="zm-head">
+      <div>
+        <h2 id="zmStripH"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>זמני היום</h2>
+        <p class="zm-date" id="zmDate"></p>
+      </div>
+      <a class="zm-all" href="#zmanim">כל המיקומים והזמנים<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></a>
+    </div>
+    <div class="zm-scroll"><table class="zm-table zm-mini zm-narrow" id="zmMini"></table><table class="zm-table zm-mini zm-wide" id="zmMiniWide"></table></div>
+    <div class="zm-shab" id="zmNext"></div>
+  </section>
   <section class="fresh" id="fresh" hidden aria-labelledby="freshH">
     <div class="fresh-head">
       <span class="fresh-badge"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.6 6.3L21 9l-5 4.4L17.5 20 12 16.6 6.5 20 8 13.4 3 9l6.4-.7z"/></svg>חדש</span>
@@ -562,6 +623,31 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
   </div>
   </div>
 </main>
+<section class="wrap zm-page" id="zmanim" hidden tabindex="-1" aria-labelledby="zmH">
+  <a class="zm-back" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>חזרה למאגר</a>
+  <h2 id="zmH">זמני היום</h2>
+  <p class="zm-date big" id="zmPageDate"></p>
+  <div class="zm-controls">
+    <div class="seg" role="group" aria-label="בחירת יום">
+      <button type="button" id="zmPrev">יום קודם</button>
+      <button type="button" id="zmToday">היום</button>
+      <button type="button" id="zmNextDay">יום הבא</button>
+    </div>
+    <label class="zm-pick">תאריך <input type="date" id="zmPick"></label>
+    <label class="zm-pick">מיקום <input type="search" id="zmFilter" placeholder="למשל: צפת" autocomplete="off"></label>
+  </div>
+  <p class="zm-note" id="zmNote"></p>
+  <div class="zm-scroll"><table class="zm-table zm-full" id="zmFull"></table></div>
+  <div class="zm-shab-head">
+    <h3 id="zmShabH"></h3>
+    <div class="seg" role="group" aria-label="שבת או מועד">
+      <button type="button" id="zmShabPrev">הקודם</button>
+      <button type="button" id="zmShabNext">הבא</button>
+    </div>
+  </div>
+  <div class="zm-scroll zm-sh-wrap"><table class="zm-table zm-sh" id="zmShab"></table></div>
+  <p class="zm-src" id="zmSrc"></p>
+</section>
 <section class="wrap media" id="media" aria-labelledby="mediaH">
 <h2 id="mediaH">שיעורים מוקלטים</h2>
 <p>שיעורי וידאו ושמע של בית המדרש להלכה, ביוטיוב ובספוטיפיי</p>
@@ -1093,6 +1179,115 @@ $("menuSearch").addEventListener("click", ()=>{ closeMenu(); window.scrollTo({to
 // hide "חדש במאגר" in the menu while that section is empty
 new MutationObserver(()=>{ $("menuFresh").hidden = $("fresh").hidden; }).observe($("fresh"), {attributes:true, attributeFilter:["hidden"]});
 $("menuFresh").hidden = $("fresh").hidden;
+
+// ---------- זמני היום ----------
+const ZL = {alot90:["עלות השחר","90 דק׳"], alot72:["עלות השחר","72 דק׳"], talit:["טלית ותפילין",""], sunrise:["זריחה",""],
+  shema:["סוף זמן ק״ש","גר״א"], tfila:["סוף זמן תפילה","גר״א"], chatzot:["חצות",""], mincha:["מנחה גדולה",""],
+  plag:["פלג המנחה",""], sunset:["שקיעה",""], tzeit:["צאת הכוכבים",""]};
+const ZMAIN = ["ירושלים","תל אביב","חיפה","באר שבע"];
+const ZKEY = ["alot72","sunrise","shema","tfila","chatzot","sunset","tzeit"];
+let Z = null, zmDay = null, zmEv = null;
+const isoToday = () => new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Jerusalem"}).format(new Date());
+const isoAdd = (iso, n) => { const d = new Date(iso+"T12:00:00Z"); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); };
+function gem(n){
+  const ones="אבגדהוזחט", tens="יכלמנסעפצ", hund=["","ק","ר","ש","ת","תק","תר","תש","תת","תתק"];
+  n %= 1000;
+  const r = n % 100;
+  let s = hund[Math.floor(n/100)] + (r===15 ? "טו" : r===16 ? "טז" : (tens[Math.floor(r/10)-1]||"") + (ones[r%10-1]||""));
+  return s.length > 1 ? s.slice(0,-1) + "״" + s.slice(-1) : s + "׳";
+}
+function zmLabel(iso){
+  const d = new Date(iso+"T12:00:00Z");
+  const wd = new Intl.DateTimeFormat("he",{weekday:"long",timeZone:"UTC"}).format(d);
+  let hd = ""; try { hd = new Intl.DateTimeFormat("he-u-ca-hebrew",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}).format(d).replace(/\d+/g, m => gem(+m)); } catch(e){}
+  const g = `${d.getUTCDate()}.${d.getUTCMonth()+1}.${d.getUTCFullYear()}`;
+  return `<b>${esc(wd)}${hd?`, ${esc(hd)}`:""}</b> · ${g}`;
+}
+const zShort = iso => { const [y,m,d] = iso.split("-"); return `${+d}.${+m}`; };
+// the table has a row about once a week: use the latest row up to the day asked for
+function zmRow(loc, iso){
+  const rows = Z.daily[loc]; let r = null;
+  for (const x of rows){ if (x[0] <= iso) r = x; else break; }
+  return r;
+}
+function zmInRange(iso){ const rows = Z.daily[Z.locations[0]]; return iso >= rows[0][0] && iso <= isoAdd(rows[rows.length-1][0], 7); }
+function zmEvent(iso){ return Z.shabbat.findIndex(e => e.date >= iso); }
+function evTitle(e){
+  const holiday = /חג|ראש השנה|כיפור|עצרת|חוה|פסח|שבועות|צום|תענית|עשרה/.test(e.name);
+  return (holiday ? e.name : `שבת פרשת ${e.name}`) + (e.hdate ? ` · ${e.hdate}` : "") + ` · ${zShort(e.date)}`;
+}
+const evLabels = e => e.kind === "fast" ? ["תחילת הצום","סוף הצום"] : ["הדלקת נרות","צאת " + (/חג|ראש השנה|כיפור|עצרת|פסח|שבועות/.test(e.name) && !/חוה/.test(e.name) ? "החג" : "השבת")];
+function renderStrip(){
+  const iso = isoToday();
+  if (!zmInRange(iso)){ $("zmStrip").hidden = true; return; }
+  const col = Z.cols;
+  $("zmDate").innerHTML = zmLabel(iso);
+  const rows = ZMAIN.filter(l => Z.daily[l]).map(l => [l, zmRow(l, iso)]);
+  $("zmMini").innerHTML = `<thead><tr><th scope="col"></th>${rows.map(([l])=>`<th scope="col">${esc(l)}</th>`).join("")}</tr></thead><tbody>`
+    + ZKEY.map(k => { const i = col.indexOf(k) + 2, [a,b] = ZL[k];
+        return `<tr${k==="sunset"?' class="key"':""}><th scope="row">${a}${b?`<small>${b}</small>`:""}</th>${rows.map(([,r])=>`<td>${r?r[i]:"–"}</td>`).join("")}</tr>`; }).join("") + "</tbody>";
+  $("zmMiniWide").innerHTML = `<thead><tr><th scope="col"></th>${ZKEY.map(k=>`<th scope="col">${ZL[k][0]}${ZL[k][1]?`<small>${ZL[k][1]}</small>`:""}</th>`).join("")}</tr></thead><tbody>`
+    + rows.map(([l,r]) => `<tr><th scope="row">${esc(l)}</th>${ZKEY.map(k=>`<td${k==="sunset"?' class="key-c"':""}>${r?r[col.indexOf(k)+2]:"–"}</td>`).join("")}</tr>`).join("") + "</tbody>";
+  const ei = zmEvent(iso), e = Z.shabbat[ei];
+  if (e){
+    const [a,b] = evLabels(e);
+    $("zmNext").innerHTML = `<strong>${esc(evTitle(e))}</strong>` + ZMAIN.filter(l=>e.times[l]).map(l => {
+      const [i,o] = e.times[l];
+      return `<span class="zm-chip">${esc(l)} <span>${i?a+" ":""}</span>${i||""}${i?" · ":""}<span>${b}</span> ${o}</span>`; }).join("");
+  } else $("zmNext").innerHTML = "";
+  $("zmStrip").hidden = false;
+}
+function renderZmPage(){
+  if (!Z) return;
+  const iso = zmDay, q = norm($("zmFilter").value);
+  $("zmPick").value = iso;
+  $("zmPageDate").innerHTML = zmLabel(iso);
+  const col = Z.cols, locs = Z.locations.filter(l => !q || norm(l).includes(q));
+  if (!zmInRange(iso)){
+    const rows = Z.daily[Z.locations[0]];
+    $("zmNote").textContent = `הלוח מכסה את שנת ${Z.year.replace(/(.)$/,"״$1")}, מ-${zShort(rows[0][0])}.${rows[0][0].slice(0,4)} עד ${zShort(rows[rows.length-1][0])}.${rows[rows.length-1][0].slice(0,4)}. בחרו תאריך בטווח הזה.`;
+    $("zmFull").innerHTML = ""; return;
+  }
+  const r0 = zmRow(Z.locations[0], iso);
+  $("zmNote").textContent = r0[0] === iso ? "הזמנים מתוך לוח דינים ומנהגים, לתאריך זה." :
+    `הלוח נותן זמנים בערך פעם בשבוע. מוצגת השורה של ${r0[1]} (${zShort(r0[0])}), השורה האחרונה עד התאריך שנבחר. ההפרש מיום ליום הוא דקה-שתיים לכל היותר.`;
+  $("zmFull").innerHTML = `<thead><tr><th scope="col">מיקום</th>${col.map(k=>`<th scope="col">${ZL[k][0]}${ZL[k][1]?`<small>${ZL[k][1]}</small>`:""}</th>`).join("")}</tr></thead><tbody>`
+    + (locs.length ? locs.map(l => { const r = zmRow(l, iso);
+        return `<tr${ZMAIN.includes(l)?' class="main"':""}><th scope="row">${esc(l)}</th>${col.map((k,i)=>`<td>${r?r[i+2]:"–"}</td>`).join("")}</tr>`; }).join("")
+      : `<tr><td colspan="${col.length+1}">לא נמצא מיקום בשם הזה</td></tr>`) + "</tbody>";
+  if (zmEv == null || zmEv < 0) zmEv = Math.max(0, zmEvent(iso));
+  renderShab(locs);
+}
+function renderShab(locs){
+  const e = Z.shabbat[zmEv]; if (!e) return;
+  const [a,b] = evLabels(e);
+  $("zmShabH").textContent = evTitle(e);
+  $("zmShabPrev").disabled = zmEv <= 0; $("zmShabNext").disabled = zmEv >= Z.shabbat.length - 1;
+  $("zmShab").innerHTML = `<thead><tr><th scope="col">מיקום</th><th scope="col">${a}</th><th scope="col">${b}</th></tr></thead><tbody>`
+    + (locs || Z.locations).map(l => { const [i,o] = e.times[l] || [];
+        return `<tr${ZMAIN.includes(l)?' class="main"':""}><th scope="row">${esc(l)}</th><td>${i||"–"}</td><td>${o||"–"}</td></tr>`; }).join("") + "</tbody>";
+}
+function zmRoute(){
+  const on = location.hash === "#zmanim";
+  document.body.classList.toggle("zm-mode", on);
+  $("zmanim").hidden = !on;
+  if (on){ if (!zmDay) zmDay = isoToday(); renderZmPage(); window.scrollTo(0,0); $("zmanim").focus({preventScroll:true}); }
+}
+window.addEventListener("hashchange", zmRoute);
+const zmGo = iso => { zmDay = iso; zmEv = null; renderZmPage(); };
+$("zmPrev").addEventListener("click", ()=>zmGo(isoAdd(zmDay,-1)));
+$("zmNextDay").addEventListener("click", ()=>zmGo(isoAdd(zmDay,1)));
+$("zmToday").addEventListener("click", ()=>zmGo(isoToday()));
+$("zmPick").addEventListener("change", e=>{ if (e.target.value) zmGo(e.target.value); });
+$("zmFilter").addEventListener("input", ()=>renderZmPage());
+$("zmShabPrev").addEventListener("click", ()=>{ zmEv--; renderZmPage(); });
+$("zmShabNext").addEventListener("click", ()=>{ zmEv++; renderZmPage(); });
+$("zmanim").querySelector(".zm-back").addEventListener("click", e=>{ e.preventDefault(); history.pushState("", "", location.pathname + location.search); zmRoute(); });
+fetch("zmanim.json").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(z => {
+  Z = z;
+  $("zmSrc").innerHTML = `מקור: <a href="https://drive.google.com/file/d/${esc(z.file)}/view" target="_blank" rel="noopener">לוח דינים ומנהגים – לוחות זמנים ${esc(z.year.replace(/(.)$/,"״$1"))}</a>. הזמנים לפי שעון ישראל, כולל שעון קיץ.`;
+  renderStrip(); zmRoute();
+}).catch(()=>{ /* no table this year: the strip stays hidden */ if (location.hash === "#zmanim") $("zmNote").textContent = "לוח הזמנים לא זמין כרגע."; zmRoute(); });
 
 // text size
 let fs = +(load("bm-fs")||16);

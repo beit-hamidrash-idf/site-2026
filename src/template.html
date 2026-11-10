@@ -321,6 +321,25 @@ select{font:inherit;font-size:.9rem;padding:6px 10px;border-radius:10px;border:1
 .f.word{background:var(--word-soft);color:var(--word)}
 .f:hover{border-color:currentColor}
 mark{background:var(--mark);color:var(--mark-ink);border-radius:3px;padding:0 1px}
+.list.scrollbox{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.all-link{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-weight:700;text-decoration:none;color:var(--accent);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 16px}
+.all-link:hover{border-color:var(--accent)}
+.all-link svg{width:18px;height:18px}
+.all-link small{color:var(--muted);font-weight:400}
+.row-more a{display:block;text-align:center;font-weight:700;text-decoration:none;padding:12px}
+.pager{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin-top:16px}
+.pager button{font:inherit;font-weight:700;min-width:40px;height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font-variant-numeric:tabular-nums}
+.pager button:hover:not(:disabled){border-color:var(--accent)}
+.pager button[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.pager button:disabled{opacity:.45;cursor:default}
+.pager .gap{color:var(--muted);padding:0 2px}
+.pager .of{flex-basis:100%;text-align:center;color:var(--muted);font-size:.88rem}
+.docs-head{display:none;align-items:baseline;gap:16px;margin-top:22px}
+.docs-head h2{font-family:var(--display);font-size:1.6rem;margin:0}
+.docs-back{font-weight:700;text-decoration:none}
+body.docs-mode .docs-head{display:flex}
+body.docs-mode #fresh,body.docs-mode #media,body.docs-mode .viewbar{display:none}
+#results{scroll-margin-top:76px}
 .more{display:block;margin:16px auto 0;font:inherit;font-weight:700;background:var(--surface);color:var(--accent);border:1px solid var(--line);border-radius:10px;padding:10px 22px;cursor:pointer}
 .more:hover{border-color:var(--accent)}
 .empty{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:34px 22px;text-align:center}
@@ -624,6 +643,7 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
     <button type="button" class="more" id="fmore" hidden></button>
   </section>
   <div id="lview">
+  <div class="docs-head"><a class="docs-back" href="#">חזרה לדף הראשי</a><h2>כל המסמכים</h2></div>
   <div class="tabs" role="tablist" aria-label="אוספים" id="tabs"></div>
   <p class="blurb" id="blurb"></p>
   <div class="grid">
@@ -652,6 +672,8 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
       <ol class="list" id="list"></ol>
       <div id="emptyBox"></div>
       <button type="button" class="more" id="more" hidden></button>
+      <a class="all-link" id="allLink" href="#docs" hidden></a>
+      <nav class="pager" id="pager" aria-label="מעבר בין עמודים" hidden></nav>
     </section>
   </div>
   </div>
@@ -991,21 +1013,68 @@ function rowHTML(d, toks){
 }
 
 const SUGG = ["מוקצה","חנוכה","ציצית","שמיטה","קריאת התורה","בשר וחלב","שבת שטח","תפילין"];
+const HOME_ROWS = 60, PER_PAGE = 20;
+let docsMode = location.hash === "#docs", lastKey = "";
+S.page = 1;
 function render(){
   const {list, toks} = results();
-  const shown = list.slice(0, S.shown);
-  $("list").innerHTML = shown.map(d=>rowHTML(d,toks)).join("");
+  const key = [S.q, S.coll, S.topic, S.fmt, S.sort, $("deep").checked].join("|");
+  if (key !== lastKey){ S.page = 1; lastKey = key; }           // new search or filter: back to page 1
+  const pages = Math.max(1, Math.ceil(list.length / PER_PAGE));
+  if (S.page > pages) S.page = pages;
+  const shown = docsMode ? list.slice((S.page-1)*PER_PAGE, S.page*PER_PAGE) : list.slice(0, HOME_ROWS);
+  $("list").innerHTML = shown.map(d=>rowHTML(d,toks)).join("")
+    + (!docsMode && list.length > HOME_ROWS ? `<li class="row-more"><a href="#docs">להמשך הרשימה: כל ${list.length} המסמכים</a></li>` : "");
+  $("list").classList.toggle("scrollbox", !docsMode);
+  fitList();
+  $("allLink").hidden = docsMode || list.length <= 3;
+  $("allLink").innerHTML = `לכל ${list.length} המסמכים <small>· 20 בכל עמוד</small><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>`;
+  renderPager(pages);
   $("list").hidden = !list.length;
   const where = [COLLS.find(c=>c.id===S.coll).name].concat(S.topic ? S.topic.split("\u0001") : []).join(" ‹ ");
   $("count").innerHTML = `${list.length} ${list.length===1?"מסמך":"מסמכים"}${S.q.trim()?` עבור „${esc(S.q.trim())}”`:""} <span class="crumb">· ${esc(where)}</span>`;
   $("emptyBox").innerHTML = list.length ? "" :
     `<div class="empty"><h3>לא נמצאו מסמכים</h3><p>נסו מילה אחרת, בדקו את הכתיב, או חפשו בכל המאגר.</p>
      <div class="sugg">${(S.coll||S.topic||S.fmt)?`<button type="button" class="chip" data-reset="1">חיפוש בכל המאגר</button>`:""}${SUGG.map(s=>`<button type="button" class="chip" data-s="${s}">${s}</button>`).join("")}</div><span class="tell">חסר משהו במאגר? <a href="https://forms.gle/Srpsau5Nsxe7kv6t7" data-fb target="_blank" rel="noopener">ספרו לנו</a></span></div>`;
-  const rest = list.length - shown.length;
-  $("more").hidden = rest <= 0;
-  $("more").textContent = `הצגת עוד ${Math.min(rest,PAGE)} (נותרו ${rest})`;
+  $("more").hidden = true;
   $("clear").hidden = !S.q;
 }
+// home: the list box is exactly three rows tall and scrolls inside
+function fitList(){
+  const el = $("list");
+  if (docsMode || el.children.length <= 3){ el.style.maxHeight = ""; return; }
+  requestAnimationFrame(() => {
+    const r = el.children; el.style.maxHeight = (r[0].offsetHeight + r[1].offsetHeight + r[2].offsetHeight + 2) + "px";
+  });
+}
+window.addEventListener("resize", () => { if (!docsMode) fitList(); });
+function renderPager(pages){
+  const pg = $("pager");
+  if (!docsMode || pages <= 1){ pg.hidden = true; pg.innerHTML = ""; return; }
+  const p = S.page, nums = new Set([1, pages, p-2, p-1, p, p+1, p+2].filter(n => n >= 1 && n <= pages));
+  let html = `<button type="button" data-page="${p-1}"${p<=1?" disabled":""}>הקודם</button>`, prev = 0;
+  for (const n of [...nums].sort((a,b)=>a-b)){
+    if (n - prev > 1) html += `<span class="gap" aria-hidden="true">…</span>`;
+    html += `<button type="button" data-page="${n}"${n===p?' aria-current="page"':""} aria-label="עמוד ${n}">${n}</button>`; prev = n;
+  }
+  html += `<button type="button" data-page="${p+1}"${p>=pages?" disabled":""}>הבא</button><span class="of">עמוד ${p} מתוך ${pages}</span>`;
+  pg.innerHTML = html; pg.hidden = false;
+}
+$("pager").addEventListener("click", e => {
+  const b = e.target.closest("button[data-page]"); if (!b || b.disabled) return;
+  S.page = +b.dataset.page; render();
+  $("results").scrollIntoView({block:"start"});
+});
+function docsRoute(){
+  const on = location.hash === "#docs";
+  if (on === docsMode && !on) return;
+  docsMode = on;
+  document.body.classList.toggle("docs-mode", on);
+  if (on && typeof VIEW !== "undefined" && VIEW !== "list") setView("list");
+  render();
+  if (on) window.scrollTo(0, document.getElementById("lview").getBoundingClientRect().top + scrollY - 70);
+}
+window.addEventListener("hashchange", docsRoute);
 
 $("emptyBox").addEventListener("click", e=>{
   const b = e.target.closest("button"); if(!b) return;
@@ -1461,4 +1530,5 @@ applyFs();
 })();
 
 renderTabs(); renderTopics(); setView(VIEW);
+if (docsMode) docsRoute();
 </script>

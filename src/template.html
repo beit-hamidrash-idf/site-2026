@@ -66,6 +66,32 @@ a{color:var(--accent)}
 h1{font-family:var(--display);font-weight:900;font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.05;margin:0;text-wrap:balance}
 h1 span{font-weight:500;color:var(--mast-muted);font-size:.5em;display:block;margin-top:8px;letter-spacing:.01em}
 .side{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+/* today's times in the masthead, beside the search */
+.mast-zm{background:color-mix(in srgb,var(--mast) 72%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid color-mix(in srgb,var(--mast-ink) 18%,transparent);border-radius:16px;padding:12px 14px 10px;color:var(--mast-ink);display:grid;gap:6px;box-shadow:0 10px 28px rgba(0,0,0,.25)}
+.mz-head{display:flex;align-items:center;gap:8px}
+.mz-head h2{margin:0;font-family:var(--display);font-size:1.15rem;flex:1}
+.mz-head select{font:inherit;font-weight:700;font-size:.92rem;color:var(--mast-ink);background:color-mix(in srgb,var(--mast-ink) 10%,transparent);border:1px solid color-mix(in srgb,var(--mast-ink) 22%,transparent);border-radius:9px;padding:4px 8px;max-width:150px}
+.mz-head select option{color:var(--ink);background:var(--surface)}
+.mz-geo{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;border:1px solid color-mix(in srgb,var(--mast-ink) 22%,transparent);background:none;color:var(--gold);cursor:pointer;flex:none}
+.mz-geo:hover{background:color-mix(in srgb,var(--mast-ink) 10%,transparent)}
+.mz-geo svg{width:18px;height:18px}
+.mz-geo.busy{opacity:.5;cursor:progress}
+.mz-date{margin:0;color:var(--mast-muted);font-size:.84rem}
+.mz-times{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:4px 0 2px}
+.mz-times div{background:color-mix(in srgb,var(--mast-ink) 8%,transparent);border-radius:10px;padding:6px 4px;text-align:center}
+.mz-times dt{font-size:.74rem;color:var(--mast-muted);white-space:nowrap}
+.mz-times dd{margin:0;font-size:1.2rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.mz-times div.hl dd{color:var(--gold)}
+.mz-more{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;color:var(--mast-ink);text-decoration:none;font-size:.84rem;padding-top:4px}
+.mz-more span{color:var(--mast-muted)}
+.mz-more b{color:var(--gold);white-space:nowrap}
+.mz-more:hover b{text-decoration:underline}
+@media (min-width:980px){
+  .mast .wrap{grid-template-columns:minmax(0,1fr) 370px;column-gap:28px;align-content:start}
+  .mast-top{grid-column:1/-1}
+  .mast .wrap > .search,.mast .wrap > .deep,.mast .wrap > .stats{grid-column:1}
+  .mast-zm{grid-column:2;grid-row:2/span 3;align-self:start}
+}
 .logos{display:flex;align-items:center;gap:18px}
 .logos img{height:78px;width:auto;max-width:100%;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
 .a11y{display:flex;gap:6px;align-items:center}
@@ -176,6 +202,8 @@ body.dlg-open{overflow:hidden}
 .zm-full thead th:first-child{background:var(--bg)}
 .zm-full tbody tr:hover th,.zm-full tbody tr:hover td{background:var(--accent-soft)}
 .zm-full tr.main th{color:var(--accent)}
+.zm-full tr.mine th,.zm-full tr.mine td{background:color-mix(in srgb,var(--gold) 16%,var(--surface))}
+.zm-mine{display:block;font-weight:400;font-size:.72rem;color:var(--muted)}
 .zm-full thead th small{display:block;font-weight:400;font-size:.72rem}
 .zm-shab{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:.95rem}
 .zm-shab strong{font-family:var(--display);font-size:1.08rem}
@@ -550,6 +578,17 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
     </form>
     <label class="deep" for="deep"><input type="checkbox" id="deep" checked> חיפוש גם בתוך תוכן החוברות <span id="deepState" aria-live="polite"></span></label>
     <p class="stats" id="stats"></p>
+    <aside class="mast-zm" id="mastZm" hidden aria-labelledby="mzTitle">
+      <div class="mz-head">
+        <h2 id="mzTitle">זמני היום</h2>
+        <label class="sr" for="mzLoc">מיקום</label>
+        <select id="mzLoc"></select>
+        <button type="button" class="mz-geo" id="mzGeo" aria-label="בחירת המיקום הקרוב אליי" title="המיקום הקרוב אליי"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></button>
+      </div>
+      <p class="mz-date" id="mzDate"></p>
+      <dl class="mz-times" id="mzTimes"></dl>
+      <a class="mz-more" href="#zmanim"><span id="mzShab"></span><b>לכל הזמנים והמיקומים</b></a>
+    </aside>
   </div>
   <div class="thread" aria-hidden="true"></div>
 </header>
@@ -1226,6 +1265,46 @@ function evTitle(e){
   return (holiday ? e.name : `שבת פרשת ${e.name}`) + (e.hdate ? ` · ${e.hdate}` : "") + ` · ${zShort(e.date)}`;
 }
 const evLabels = e => e.kind === "fast" ? ["תחילת הצום","סוף הצום"] : ["הדלקת נרות","צאת " + (/חג|ראש השנה|כיפור|עצרת|פסח|שבועות/.test(e.name) && !/חוה/.test(e.name) ? "החג" : "השבת")];
+// approximate coordinates of the table's locations, to pick the nearest one
+const ZPOS = {"כתר החרמון":[33.30,35.78],"קרית שמונה":[33.21,35.57],"מעלות":[33.02,35.27],"קצרין":[32.99,35.69],"צפת":[32.96,35.50],
+  "חיפה":[32.79,34.99],"עפולה":[32.61,35.29],"בקעות":[32.21,35.47],"כפר תפוח":[32.12,35.23],"תל אביב":[32.08,34.78],"צריפין":[31.96,34.84],
+  "ירושלים":[31.78,35.23],"אשקלון":[31.67,34.57],"חברון":[31.53,35.10],"מחנה רעים":[31.39,34.46],"באר שבע":[31.25,34.79],
+  "קרית ההדרכה":[30.98,34.76],"צאלים":[31.20,34.53],"הר קרן":[30.88,34.48],"עין יהב":[30.66,35.24],"מצפה רמון":[30.61,34.80],"אילת":[29.56,34.95]};
+function nearestLoc(lat, lon){
+  let best = null, bd = Infinity;
+  for (const l of Z.locations){ const c = ZPOS[l]; if (!c) continue;
+    const d = (c[0]-lat)**2 + ((c[1]-lon)*Math.cos(lat*Math.PI/180))**2; if (d < bd){ bd = d; best = l; } }
+  return best;
+}
+let myLoc = load("bm-loc");
+function renderMastZm(){
+  const iso = isoToday();
+  if (!Z || !zmInRange(iso)){ $("mastZm").hidden = true; return; }
+  if (!Z.daily[myLoc]) myLoc = Z.daily["ירושלים"] ? "ירושלים" : Z.locations[0];
+  $("mzLoc").innerHTML = Z.locations.map(l => `<option${l===myLoc?" selected":""}>${esc(l)}</option>`).join("");
+  $("mzDate").innerHTML = zmLabel(iso).replace(/<\/?b>/g, "");
+  const r = zmRow(myLoc, iso), i = k => Z.cols.indexOf(k) + 2;
+  $("mzTimes").innerHTML = [["sunrise","זריחה"],["shema","סוף ק״ש"],["sunset","שקיעה"],["tzeit","צאת הכוכבים"]]
+    .map(([k,n]) => `<div${k==="sunset"?' class="hl"':""}><dt>${n}</dt><dd>${r ? r[i(k)] : "–"}</dd></div>`).join("");
+  const e = Z.shabbat[zmEvent(iso)];
+  if (e && e.times[myLoc]){
+    const [a,b] = evLabels(e), [ti, to] = e.times[myLoc];
+    $("mzShab").textContent = `${evTitle(e).split(" · ")[0]}: ${ti ? `${a} ${ti} · ` : ""}${b} ${to}`;
+  } else $("mzShab").textContent = "";
+  $("mastZm").hidden = false;
+}
+$("mzLoc").addEventListener("change", e => { myLoc = e.target.value; store("bm-loc", myLoc); renderMastZm(); });
+function locate(quiet){
+  if (!navigator.geolocation) return;
+  $("mzGeo").classList.add("busy");
+  navigator.geolocation.getCurrentPosition(p => {
+    $("mzGeo").classList.remove("busy");
+    const l = nearestLoc(p.coords.latitude, p.coords.longitude);
+    if (l){ myLoc = l; store("bm-loc", l); renderMastZm(); }
+  }, () => { $("mzGeo").classList.remove("busy"); if (!quiet) $("mzDate").textContent = "לא התקבל מיקום. אפשר לבחור מהרשימה."; },
+  { maximumAge: 3600000, timeout: 10000 });
+}
+$("mzGeo").addEventListener("click", () => locate(false));
 function renderStrip(){
   const iso = isoToday();
   if (!zmInRange(iso)){ $("zmStrip").hidden = true; return; }
@@ -1262,7 +1341,7 @@ function renderZmPage(){
     `הלוח נותן זמנים בערך פעם בשבוע. מוצגת השורה של ${r0[1]} (${zShort(r0[0])}), השורה האחרונה עד התאריך שנבחר. ההפרש מיום ליום הוא דקה-שתיים לכל היותר.`;
   $("zmFull").innerHTML = `<thead><tr><th scope="col">מיקום</th>${col.map(k=>`<th scope="col">${ZL[k][0]}${ZL[k][1]?`<small>${ZL[k][1]}</small>`:""}</th>`).join("")}</tr></thead><tbody>`
     + (locs.length ? locs.map(l => { const r = zmRow(l, iso);
-        return `<tr${ZMAIN.includes(l)?' class="main"':""}><th scope="row">${esc(l)}</th>${col.map((k,i)=>`<td>${r?r[i+2]:"–"}</td>`).join("")}</tr>`; }).join("")
+        return `<tr class="${ZMAIN.includes(l)?"main":""}${l===myLoc?" mine":""}"><th scope="row">${esc(l)}${l===myLoc?' <small class="zm-mine">המיקום שלי</small>':""}</th>${col.map((k,i)=>`<td>${r?r[i+2]:"–"}</td>`).join("")}</tr>`; }).join("")
       : `<tr><td colspan="${col.length+1}">לא נמצא מיקום בשם הזה</td></tr>`) + "</tbody>";
   if (zmEv == null || zmEv < 0) zmEv = Math.max(0, zmEvent(iso));
   renderShab(locs);
@@ -1295,7 +1374,8 @@ $("zmanim").querySelector(".zm-back").addEventListener("click", e=>{ e.preventDe
 fetch("zmanim.json").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(z => {
   Z = z;
   $("zmSrc").innerHTML = `מקור: <a href="https://drive.google.com/file/d/${esc(z.file)}/view" target="_blank" rel="noopener">לוח דינים ומנהגים – לוחות זמנים ${esc(z.year.replace(/(.)$/,"״$1"))}</a>. הזמנים לפי שעון ישראל, כולל שעון קיץ.`;
-  renderStrip(); zmRoute();
+  renderStrip(); renderMastZm(); zmRoute();
+  if (!load("bm-loc") && navigator.permissions) navigator.permissions.query({ name: "geolocation" }).then(s => { if (s.state === "granted") locate(true); }).catch(()=>{});
 }).catch(()=>{ /* no table this year: the strip stays hidden */ if (location.hash === "#zmanim") $("zmNote").textContent = "לוח הזמנים לא זמין כרגע."; zmRoute(); });
 
 // ---------- forum (loaded only when opened) ----------

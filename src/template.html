@@ -417,7 +417,7 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
 <a class="skip" href="#q">דילוג לחיפוש</a>
 <nav class="topnav" aria-label="תפריט ראשי">
   <div class="wrap topnav-in">
-    <a class="brand" href="#top" data-top><img src="icon-192.png" alt="" width="34" height="34"><span>בית המדרש להלכה</span></a>
+    <a class="brand" href="./" data-top><img src="icon-192.png" alt="" width="34" height="34"><span>בית המדרש להלכה</span></a>
     <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuList"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>תפריט</button>
     <ul class="menu" id="menuList">
       <li><a href="#zmanim">זמני היום</a></li>
@@ -1177,7 +1177,13 @@ $("menuList").addEventListener("click", e=>{
   }
   closeMenu();
 });
-document.querySelector(".brand").addEventListener("click", e=>{ e.preventDefault(); window.scrollTo({top:0}); });
+// logo → main page: leave any sub-page (#zmanim, #forum…) and go back to the top
+document.querySelector(".brand").addEventListener("click", e=>{
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; // let new-tab clicks through
+  e.preventDefault(); closeMenu();
+  if (location.hash){ history.pushState("", "", location.pathname + location.search); window.dispatchEvent(new HashChangeEvent("hashchange")); }
+  window.scrollTo({top:0});
+});
 $("menuSearch").addEventListener("click", ()=>{ closeMenu(); window.scrollTo({top:0}); $("q").focus({preventScroll:true}); });
 // hide "חדש במאגר" in the menu while that section is empty
 new MutationObserver(()=>{ $("menuFresh").hidden = $("fresh").hidden; }).observe($("fresh"), {attributes:true, attributeFilter:["hidden"]});

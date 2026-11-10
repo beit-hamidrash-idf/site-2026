@@ -4,7 +4,7 @@ Usage: python scripts/videos.py src/videos.json data-videos.json
 YouTube's public feed lists only the newest 15 videos, so the list is cumulative: the feed is merged
 with the list this site published on its previous build (videos.json on the live site) and with the
 starter list in src/videos.json. Newest first. If YouTube cannot be reached, the older lists are kept."""
-import html, json, re, sys, urllib.request
+import html, json, re, sys, urllib.error, urllib.request
 
 CHANNEL = 'UCNySKxULy7VBPkZIY5N0_3g'
 FEED = f'https://www.youtube.com/feeds/videos.xml?channel_id={CHANNEL}'
@@ -33,9 +33,23 @@ except ValueError:
     previous = []
 seed = json.load(open(seed_path, encoding='utf-8'))
 
+def gone(vid):
+    """True when YouTube says the video no longer exists (deleted, or replaced by a new upload)."""
+    try:
+        urllib.request.urlopen(f'https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={vid}&format=json', timeout=30)
+        return False
+    except urllib.error.HTTPError as e:
+        return e.code in (400, 401, 403, 404)
+    except Exception:
+        return False   # network trouble: keep it
+
 out, seen = [], set()
 for v in feed + previous + seed:
     if v.get('id') and v['id'] not in seen:
         seen.add(v['id']); out.append(v)
+if feed:   # YouTube is reachable: check the older entries are still there
+    removed = [v for v in out if v not in feed and gone(v['id'])]
+    out = [v for v in out if v not in removed]
+    if removed: print('removed from YouTube:', ', '.join(v['id'] for v in removed), file=sys.stderr)
 print(len(feed), 'in feed,', len(out), 'videos in total', file=sys.stderr)
 json.dump(out, open(out_path, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))

@@ -41,6 +41,23 @@ except ValueError:
     previous = []
 seed = json.load(open(seed_path, encoding='utf-8'))
 
+# the show page lists all current episodes: when it can be read, it is the whole truth
+# (episodes that were removed or replaced drop out); details come from each episode's embed page
+listed = list(dict.fromkeys(re.findall(r'/episode/([A-Za-z0-9]{22})', get(f'https://open.spotify.com/show/{SHOW}'))))
+if listed:
+    known = {v['id']: v for v in latest + previous + seed}
+    current = []
+    for eid in listed:
+        if eid in known: current.append(known[eid]); continue
+        m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', get(f'https://open.spotify.com/embed/episode/{eid}'), re.S)
+        try:
+            e = json.loads(m.group(1))['props']['pageProps']['state']['data']['entity']
+            current.append({'id': eid, 't': tidy(e['title']), 'd': ((e.get('releaseDate') or {}).get('isoString') or '')[:16],
+                            's': round((e.get('duration') or 0) / 1000)})
+        except (AttributeError, KeyError, ValueError, TypeError):
+            print('could not read episode', eid, file=sys.stderr)
+    latest, previous, seed = current, [], []
+
 out, seen = [], set()
 for v in latest + previous + seed:
     if v.get('id') and v['id'] not in seen:

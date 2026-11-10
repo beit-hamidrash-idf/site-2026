@@ -63,7 +63,7 @@ a{color:var(--accent)}
 .mast .wrap{padding-block:18px 18px;display:grid;gap:12px}
 .mast-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
 .eyebrow{font-size:.76rem;letter-spacing:.08em;color:var(--mast-muted);font-weight:600;margin:0 0 2px}
-h1{font-family:var(--display);font-weight:900;font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.05;margin:0;text-wrap:balance}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(1.7rem,3vw,2.35rem);line-height:1.05;margin:0;text-wrap:balance}
 h1 span{font-weight:500;color:var(--mast-muted);font-size:.52em;display:block;margin-top:4px;letter-spacing:.01em}
 .side{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
 /* today's times in the masthead, beside the search */
@@ -89,14 +89,15 @@ h1 span{font-weight:500;color:var(--mast-muted);font-size:.52em;display:block;ma
 .mz-more b{color:var(--gold);white-space:nowrap}
 .mz-more:hover b{text-decoration:underline}
 @media (min-width:980px){
-  .mast .wrap{grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto auto auto 1fr;grid-template-areas:"title side" "search zm" "opts zm" ". zm";column-gap:28px;row-gap:10px;align-items:start}
+  .mast .wrap{padding-block:8px 14px;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto auto auto auto 1fr;grid-template-areas:"title side" "title zm" "search zm" "opts zm" ". zm";column-gap:28px;row-gap:8px;align-items:start}
   .mast .tools{flex-wrap:nowrap;gap:8px}
   .mast .tools .fb,.mast .tools .wa{padding:6px 12px;font-size:.9rem}
   .mast .a11y small{display:none}
   .mast .a11y button{height:32px;min-width:34px}
   .mast-top{display:contents}
   .mast-top > div:first-child{grid-area:title}
-  .side{grid-area:side;align-self:end}
+  .side{grid-area:side;align-self:start}
+  .mast-top > div:first-child{padding-top:6px}
   .mast .wrap > .search{grid-area:search}
   .mast-opts{grid-area:opts}
   .mast-zm{grid-area:zm}

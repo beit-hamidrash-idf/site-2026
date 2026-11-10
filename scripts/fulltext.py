@@ -2,7 +2,7 @@
 
 Writes a JSON list aligned with the documents list: one cleaned text string per document ("" when
 no text could be extracted, e.g. scanned pages)."""
-import io, json, re, subprocess, sys, tempfile, urllib.request, zipfile
+import io, json, os, re, subprocess, sys, tempfile, urllib.request, zipfile
 import concurrent.futures as cf
 
 docs = json.load(open(sys.argv[1], encoding='utf-8'))
@@ -58,12 +58,23 @@ def clean(t):
     t = re.sub(r'\s*\n\s*', '\n', t)
     return t.strip()
 
+# Text already extracted in earlier builds, by Drive file id (DRIVE_CACHE; the workflow keeps it for a week),
+# so each build only downloads files it has not seen.
+CACHE = os.path.join(os.environ.get('DRIVE_CACHE', ''), 'text.json') if os.environ.get('DRIVE_CACHE') else None
+cache = {}
+if CACHE and os.path.exists(CACHE):
+    try: cache = json.load(open(CACHE, encoding='utf-8'))
+    except ValueError: cache = {}
+
 def one(d):
     # Word first (cleanest text), then PDF.
     for kind in ('word', 'pdf'):
         if kind in d['f']:
-            text = clean(extract(fetch(d['f'][kind])))
+            fid = d['f'][kind]
+            if cache.get(fid): return cache[fid]
+            text = clean(extract(fetch(fid)))
             if len(text) > 80:
+                cache[fid] = text
                 return text
     return ''
 
@@ -72,5 +83,8 @@ with cf.ThreadPoolExecutor(8) as ex:
 empty = sum(1 for t in texts if not t)
 print(f'{len(texts)} documents, {empty} without text, {sum(map(len, texts)) // 1024} KB of text', file=sys.stderr)
 if len(texts) > 100 and empty > len(texts) // 2:
-    sys.exit('Most documents came back without text; keeping the previous site online.')
+    print('Warning: most documents came back without text (Drive may be limiting downloads).', file=sys.stderr)
+if CACHE:
+    os.makedirs(os.path.dirname(CACHE), exist_ok=True)
+    json.dump(cache, open(CACHE, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 json.dump(texts, open(sys.argv[2], 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))

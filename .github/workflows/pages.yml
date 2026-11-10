@@ -27,25 +27,40 @@ jobs:
         run: |
           sudo apt-get update -q && sudo apt-get install -y -q poppler-utils catdoc
           pip install -q python-docx pillow
+      # files already downloaded and processed are kept between builds (refreshed every week),
+      # so each build asks Drive only for what is new
+      - name: Week of the year
+        id: week
+        run: echo "week=$(date -u +%G-%V)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: .drive-cache
+          key: drive-${{ steps.week.outputs.week }}-${{ github.run_id }}
+          restore-keys: drive-${{ steps.week.outputs.week }}-
       - name: Read the Drive folder
         run: python scripts/crawl.py data-items.json
       - name: Build the site
+        env:
+          DRIVE_CACHE: .drive-cache
         run: |
           python scripts/build.py data-items.json data-docs.json data-new.json
           python scripts/tree.py data-items.json data-tree.json
-          python scripts/foldercovers.py data-tree.json data-docs.json _site/fcovers
+          python scripts/foldercovers.py data-tree.json data-docs.json .drive-cache/fcovers
           python scripts/check.py data-docs.json
           mkdir -p _site
-          python scripts/covers.py data-new.json _site/covers
+          python scripts/covers.py data-new.json .drive-cache/covers
           python scripts/videos.py src/videos.json data-videos.json
           python scripts/spotify.py src/spotify.json data-spotify.json
           python scripts/assemble.py src data-docs.json data-tree.json _site/index.html data-new.json data-videos.json data-spotify.json
-          python scripts/fulltext.py data-docs.json _site/text.json
+          python scripts/fulltext.py data-docs.json _site/text.json || echo "search inside booklets not updated"
           python scripts/zmanim.py data-items.json _site/zmanim.json || echo "zmanim table not updated"
           cp robots.txt .nojekyll _site/
           cp data-videos.json _site/videos.json
           cp data-spotify.json _site/spotify.json
           cp static/* _site/
+          mkdir -p _site/fcovers _site/covers
+          cp -r .drive-cache/fcovers/. _site/fcovers/ 2>/dev/null || true
+          cp -r .drive-cache/covers/. _site/covers/ 2>/dev/null || true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

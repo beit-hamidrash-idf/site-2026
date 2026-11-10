@@ -37,6 +37,8 @@ def first_page(data, fid):
 
 for d in items:
     fid = d['f'].get('pdf') or d['f'].get('word')
+    if fid and os.path.exists(os.path.join(out_dir, fid + '.jpg')):   # rendered in an earlier build
+        d['img'] = f'covers/{fid}.jpg'; print('cover', 'kept', d['t'], file=sys.stderr); continue
     data = fetch(fid) if fid else b''
     try:
         ok = bool(data) and first_page(data, fid)

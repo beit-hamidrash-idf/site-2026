@@ -229,7 +229,6 @@ body.dlg-open{overflow:hidden}
 .zm-sh-wrap{max-width:560px}
 .zm-src{color:var(--muted);font-size:.85rem;margin-top:16px}
 body.zm-mode > main,body.zm-mode > .mast,body.zm-mode > #media{display:none}
-body.forum-mode > main,body.forum-mode > .mast,body.forum-mode > #media{display:none}
 #zmanim{scroll-margin-top:76px}
 @media (max-width:560px){
   .zm-table th,.zm-table td{padding:6px 6px}
@@ -475,7 +474,6 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
     <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuList"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>תפריט</button>
     <ul class="menu" id="menuList">
       <li><a href="#zmanim">זמני היום</a></li>
-      <li><a href="#forum">פורום</a></li>
       <li id="menuFresh"><a href="#fresh">חדש במאגר</a></li>
       <li class="has-sub">
         <button type="button" class="sub-btn" aria-expanded="false" aria-controls="subColl">המאגר<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -703,7 +701,6 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
   <div class="zm-scroll zm-sh-wrap"><table class="zm-table zm-sh" id="zmShab"></table></div>
   <p class="zm-src" id="zmSrc"></p>
 </section>
-<section class="wrap" id="forum" hidden tabindex="-1" aria-label="פורום"></section>
 <section class="wrap media" id="media" aria-labelledby="mediaH">
 <h2 id="mediaH">שיעורים מוקלטים</h2>
 <p>שיעורי וידאו ושמע של בית המדרש להלכה, ביוטיוב ובספוטיפיי</p>
@@ -1286,7 +1283,7 @@ $("menuList").addEventListener("click", e=>{
   }
   closeMenu();
 });
-// logo → main page: leave any sub-page (#zmanim, #forum…) and go back to the top
+// logo → main page: leave any sub-page (#zmanim, #docs) and go back to the top
 document.querySelector(".brand").addEventListener("click", e=>{
   if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return; // let new-tab clicks through
   e.preventDefault(); closeMenu();
@@ -1426,23 +1423,6 @@ fetch("zmanim.json").then(r => r.ok ? r.json() : Promise.reject(r.status)).then(
   renderMastZm(); zmRoute();
   if (!load("bm-loc") && navigator.permissions) navigator.permissions.query({ name: "geolocation" }).then(s => { if (s.state === "granted") locate(true); }).catch(()=>{});
 }).catch(()=>{ /* no table this year: the strip stays hidden */ if (location.hash === "#zmanim") $("zmNote").textContent = "לוח הזמנים לא זמין כרגע."; zmRoute(); });
-
-// ---------- forum (loaded only when opened) ----------
-let forumMod = null;
-async function forumRoute(){
-  const on = location.hash.startsWith("#forum");
-  document.body.classList.toggle("forum-mode", on);
-  $("forum").hidden = !on;
-  if (!on) return;
-  if (!forumMod){
-    const css = document.createElement("link"); css.rel = "stylesheet"; css.href = "forum.css"; document.head.appendChild(css);
-    try { forumMod = await import("./forum.js"); } catch(e){ $("forum").innerHTML = `<p class="zm-note">לא הצלחנו לטעון את הפורום. נסו לרענן את הדף.</p>`; return; }
-    forumMod.mount($("forum"));
-  }
-  window.scrollTo(0,0);
-}
-window.addEventListener("hashchange", forumRoute);
-forumRoute();
 
 // text size
 let fs = +(load("bm-fs")||16);

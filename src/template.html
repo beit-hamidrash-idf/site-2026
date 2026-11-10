@@ -60,40 +60,47 @@ a{color:var(--accent)}
 .collage::after{content:"";position:absolute;inset:0;background:
   linear-gradient(to left,color-mix(in srgb,var(--mast) 94%,transparent) 0%,color-mix(in srgb,var(--mast) 84%,transparent) 42%,color-mix(in srgb,var(--mast) 52%,transparent) 100%),
   linear-gradient(to bottom,color-mix(in srgb,var(--mast) 30%,transparent),transparent 30%,transparent 70%,color-mix(in srgb,var(--mast) 55%,transparent))}
-.mast .wrap{padding-block:34px 30px;display:grid;gap:22px}
+.mast .wrap{padding-block:18px 18px;display:grid;gap:12px}
 .mast-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
-.eyebrow{font-size:.8rem;letter-spacing:.08em;color:var(--mast-muted);font-weight:600;margin:0 0 4px}
-h1{font-family:var(--display);font-weight:900;font-size:clamp(2.1rem,5.2vw,3.3rem);line-height:1.05;margin:0;text-wrap:balance}
-h1 span{font-weight:500;color:var(--mast-muted);font-size:.5em;display:block;margin-top:8px;letter-spacing:.01em}
+.eyebrow{font-size:.76rem;letter-spacing:.08em;color:var(--mast-muted);font-weight:600;margin:0 0 2px}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.05;margin:0;text-wrap:balance}
+h1 span{font-weight:500;color:var(--mast-muted);font-size:.52em;display:block;margin-top:4px;letter-spacing:.01em}
 .side{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
 /* today's times in the masthead, beside the search */
-.mast-zm{background:color-mix(in srgb,var(--mast) 72%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid color-mix(in srgb,var(--mast-ink) 18%,transparent);border-radius:16px;padding:12px 14px 10px;color:var(--mast-ink);display:grid;gap:6px;box-shadow:0 10px 28px rgba(0,0,0,.25)}
+.mast-opts{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 18px;margin-top:-6px;max-width:760px}
+.mz-ttl{flex:1;min-width:0}
+.mast-zm{max-width:100%;background:color-mix(in srgb,var(--mast) 72%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid color-mix(in srgb,var(--mast-ink) 18%,transparent);border-radius:16px;padding:9px 12px 8px;color:var(--mast-ink);display:grid;gap:6px;box-shadow:0 10px 28px rgba(0,0,0,.25)}
 .mz-head{display:flex;align-items:center;gap:8px}
-.mz-head h2{margin:0;font-family:var(--display);font-size:1.15rem;flex:1}
+.mz-head h2{margin:0;font-family:var(--display);font-size:1.05rem;line-height:1.2}
 .mz-head select{font:inherit;font-weight:700;font-size:.92rem;color:var(--mast-ink);background:color-mix(in srgb,var(--mast-ink) 10%,transparent);border:1px solid color-mix(in srgb,var(--mast-ink) 22%,transparent);border-radius:9px;padding:4px 8px;max-width:150px}
 .mz-head select option{color:var(--ink);background:var(--surface)}
 .mz-geo{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;border:1px solid color-mix(in srgb,var(--mast-ink) 22%,transparent);background:none;color:var(--gold);cursor:pointer;flex:none}
 .mz-geo:hover{background:color-mix(in srgb,var(--mast-ink) 10%,transparent)}
 .mz-geo svg{width:18px;height:18px}
 .mz-geo.busy{opacity:.5;cursor:progress}
-.mz-date{margin:0;color:var(--mast-muted);font-size:.84rem}
-.mz-times{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:4px 0 2px}
-.mz-times div{background:color-mix(in srgb,var(--mast-ink) 8%,transparent);border-radius:10px;padding:6px 4px;text-align:center}
+.mz-date{margin:0;color:var(--mast-muted);font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mz-times{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0}
+.mz-times div{background:color-mix(in srgb,var(--mast-ink) 8%,transparent);border-radius:9px;padding:4px 4px 3px;text-align:center}
 .mz-times dt{font-size:.74rem;color:var(--mast-muted);white-space:nowrap}
-.mz-times dd{margin:0;font-size:1.2rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.mz-times dd{margin:0;font-size:1.08rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
 .mz-times div.hl dd{color:var(--gold)}
-.mz-more{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;color:var(--mast-ink);text-decoration:none;font-size:.84rem;padding-top:4px}
+.mz-more{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:0 10px;color:var(--mast-ink);text-decoration:none;font-size:.8rem}
 .mz-more span{color:var(--mast-muted)}
 .mz-more b{color:var(--gold);white-space:nowrap}
 .mz-more:hover b{text-decoration:underline}
 @media (min-width:980px){
-  .mast .wrap{grid-template-columns:minmax(0,1fr) 370px;column-gap:28px;align-content:start}
-  .mast-top{grid-column:1/-1}
-  .mast .wrap > .search,.mast .wrap > .deep,.mast .wrap > .stats{grid-column:1}
-  .mast-zm{grid-column:2;grid-row:2/span 3;align-self:start}
+  .mast .wrap{grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto auto auto 1fr;grid-template-areas:"title side" "search zm" "opts zm" ". zm";column-gap:28px;row-gap:10px;align-items:start}
+  .mast .tools{flex-wrap:nowrap;gap:8px}
+  .mast .tools .fb,.mast .tools .wa{padding:6px 12px;font-size:.9rem}
+  .mast .a11y small{display:none}
+  .mast .a11y button{height:32px;min-width:34px}
+  .mast-top{display:contents}
+  .mast-top > div:first-child{grid-area:title}
+  .side{grid-area:side;align-self:end}
+  .mast .wrap > .search{grid-area:search}
+  .mast-opts{grid-area:opts}
+  .mast-zm{grid-area:zm}
 }
-.logos{display:flex;align-items:center;gap:18px}
-.logos img{height:78px;width:auto;max-width:100%;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
 .a11y{display:flex;gap:6px;align-items:center}
 .tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:flex-end}
 .wa{display:inline-flex;align-items:center;gap:8px;background:var(--wa);color:#FFFFFF;font-weight:700;text-decoration:none;padding:8px 14px;border-radius:999px;font-size:.95rem;white-space:nowrap}
@@ -122,8 +129,8 @@ dialog#fbDlg::backdrop{background:rgba(8,14,24,.6)}
 .dlg-load{position:absolute;inset:0;display:grid;place-items:center;margin:0;color:#566377}
 .dlg-foot{margin:0;padding:10px 18px;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted)}
 body.dlg-open{overflow:hidden}
-.deep{display:inline-flex;align-items:center;gap:8px;color:var(--mast-ink);font-size:.95rem;cursor:pointer;margin-top:-8px;width:fit-content}
-.deep input{width:18px;height:18px;accent-color:var(--thread);margin:0}
+.deep{display:inline-flex;align-items:center;gap:6px;color:var(--mast-ink);font-size:.84rem;cursor:pointer;width:fit-content}
+.deep input{width:15px;height:15px;accent-color:var(--thread);margin:0}
 #deepState{color:var(--mast-muted);font-size:.85rem}
 .snip{margin:7px 0 0;font-size:.9rem;line-height:1.6;color:var(--ink);background:var(--bg);border-radius:8px;padding:6px 10px;overflow-wrap:anywhere}
 .snip b{font-size:.75rem;font-weight:700;color:var(--muted);margin-inline-end:6px;letter-spacing:.02em}
@@ -135,14 +142,14 @@ body.dlg-open{overflow:hidden}
 .a11y small{color:var(--mast-muted);font-size:.8rem;margin-inline-end:4px}
 .search{position:relative;max-width:760px}
 .search svg{position:absolute;inset-inline-start:18px;top:50%;transform:translateY(-50%);width:22px;height:22px;color:var(--muted);pointer-events:none}
-#q{width:100%;font:inherit;font-size:1.2rem;padding:16px 54px 16px 96px;border-radius:14px;border:2px solid transparent;background:var(--surface);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+#q{width:100%;font:inherit;font-size:1.1rem;padding:12px 50px 12px 96px;border-radius:14px;border:2px solid transparent;background:var(--surface);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.25)}
 #q::placeholder{color:var(--muted)}
 #q::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
 #q:focus{outline:none;border-color:var(--thread)}
 .kbd{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);display:flex;gap:6px;align-items:center}
 .kbd kbd{font-family:var(--body);font-size:.8rem;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;color:var(--muted);background:var(--bg)}
 #clear{font:inherit;font-size:.9rem;background:var(--accent-soft);color:var(--accent);border:0;border-radius:8px;padding:5px 10px;cursor:pointer;font-weight:700}
-.stats{display:flex;flex-wrap:wrap;gap:6px 22px;color:var(--mast-muted);font-size:.95rem;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:2px 16px;color:var(--mast-muted);font-size:.84rem;margin:0}
 .stats b{color:var(--mast-ink);font-variant-numeric:tabular-nums;font-weight:700}
 /* tzitzit thread: white strands with tekhelet strands */
 .thread{height:7px;background:repeating-linear-gradient(90deg,var(--thread) 0 14px,transparent 14px 18px,var(--mast-ink) 18px 44px,transparent 44px 48px);opacity:.9}
@@ -153,6 +160,8 @@ body.dlg-open{overflow:hidden}
 .topnav-in{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:58px}
 .brand{display:inline-flex;align-items:center;gap:10px;color:var(--mast-ink);text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.15rem;white-space:nowrap}
 .brand img{width:34px;height:34px}
+.nav-logos{display:flex;align-items:center;gap:10px;flex:none}
+.nav-logos img{height:34px;width:auto;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
 .menu{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:2px}
 .menu > li{position:relative}
 .menu a,.menu button{font:inherit;font-size:.97rem;font-weight:600;color:var(--mast-ink);background:none;border:0;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:8px;white-space:nowrap}
@@ -168,8 +177,9 @@ body.dlg-open{overflow:hidden}
 .menu-btn{display:none;font:inherit;font-weight:700;align-items:center;gap:8px;color:var(--mast-ink);background:none;border:1px solid color-mix(in srgb,var(--mast-ink) 30%,transparent);border-radius:9px;padding:7px 12px;cursor:pointer}
 .menu-btn svg{width:20px;height:20px}
 #fresh,#media,.viewbar,#top{scroll-margin-top:76px}
-@media (max-width:1020px){
-  .menu-btn{display:inline-flex}
+@media (max-width:1180px){
+  .menu-btn{display:inline-flex;order:2}
+  .nav-logos{order:1;margin-inline-start:auto}
   .menu{display:none;position:absolute;top:100%;inset-inline:0;flex-direction:column;align-items:stretch;gap:0;padding:8px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--mast) 96%,#000);border-bottom:1px solid color-mix(in srgb,var(--mast-ink) 14%,transparent);box-shadow:0 18px 30px rgba(0,0,0,.3);max-height:calc(100dvh - 70px);overflow:auto}
   .topnav.open .menu{display:flex}
   .menu a,.menu button{width:100%;padding:12px 10px;font-size:1.02rem}
@@ -405,12 +415,17 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
   .vnav{display:none}
   .fresh{padding:18px 14px 18px;margin-top:18px}
   .side{flex-direction:column;align-items:stretch;width:100%}
-  .logos{justify-content:center}
-  .tools{justify-content:space-between}
+  .eyebrow{display:none}
+  .mast .wrap{padding-block:14px 16px;gap:10px}
+  .mast-top{gap:10px}
+  .topnav-in{gap:10px}
+  .brand{font-size:1rem;gap:7px}
+  .brand img{width:30px;height:30px}
+  .nav-logos{gap:6px}
+  .nav-logos img{height:26px}
+  .menu-btn{padding:6px 9px}
   .wa,.fb{font-size:.88rem;padding:7px 12px}
   .tools{justify-content:flex-start}
-  .logos{gap:10px}
-  .logos img{height:46px}
   .a11y small{display:none}
   #q{font-size:1.05rem;padding:14px 48px 14px 16px}
   .kbd kbd{display:none}
@@ -445,6 +460,11 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
       <li><a href="https://chat.whatsapp.com/DMLsh3eHqD1IAdnLA5AYez" target="_blank" rel="noopener">קבוצת הוואטסאפ</a></li>
       <li><button type="button" class="menu-search" id="menuSearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg><span>חיפוש</span></button></li>
     </ul>
+    <div class="nav-logos">
+      <img src="__L_hal__" alt="סמל ענף ההלכה" width="307" height="240">
+      <img src="__L_rab__" alt="סמל הרבנות הצבאית" width="240" height="240">
+      <img src="__L_idf__" alt="סמל צבא ההגנה לישראל" width="265" height="240">
+    </div>
   </div>
 </nav>
 <header class="mast" id="top">
@@ -537,15 +557,10 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
         <h1>בית המדרש להלכה<span>מאגר חומרי הלכה לחיילים ולמפקדים</span></h1>
       </div>
       <div class="side">
-      <div class="logos">
-        <img src="__L_hal__" alt="סמל ענף ההלכה" width="307" height="240">
-        <img src="__L_rab__" alt="סמל הרבנות הצבאית" width="240" height="240">
-        <img src="__L_idf__" alt="סמל צבא ההגנה לישראל" width="265" height="240">
-      </div>
       <div class="tools">
       <a class="fb ask" href="https://forms.gle/YJrq9C3aW2BZScJT6" data-fb="ask" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.3 2.4c-.5.2-.8.6-.8 1.1v.5M12 16.5h.01"/></svg><span>שאלו את הרב</span></a>
-      <a class="fb" href="https://forms.gle/Srpsau5Nsxe7kv6t7" data-fb target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/></svg><span>שליחת משוב</span></a>
-      <a class="wa" href="https://chat.whatsapp.com/DMLsh3eHqD1IAdnLA5AYez" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg><span>הצטרפו לקבוצת הוואטסאפ</span></a>
+      <a class="fb" href="https://forms.gle/Srpsau5Nsxe7kv6t7" data-fb target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14h4"/></svg><span>משוב</span></a>
+      <a class="wa" title="הצטרפו לקבוצת הוואטסאפ" href="https://chat.whatsapp.com/DMLsh3eHqD1IAdnLA5AYez" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg><span>וואטסאפ</span></a>
       <div class="a11y" role="group" aria-label="גודל טקסט">
         <small>גודל טקסט</small>
         <button type="button" id="fsDown" aria-label="הקטנת טקסט">א-</button>
@@ -560,16 +575,17 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
       <input id="q" type="search" autocomplete="off" placeholder="חפשו נושא, שם גיליון או מספר… למשל: מוקצה, חנוכה, 294" aria-describedby="count">
       <div class="kbd"><button type="button" id="clear" hidden>ניקוי</button><kbd>/</kbd></div>
     </form>
+    <div class="mast-opts">
     <label class="deep" for="deep"><input type="checkbox" id="deep" checked> חיפוש גם בתוך תוכן החוברות <span id="deepState" aria-live="polite"></span></label>
     <p class="stats" id="stats"></p>
+    </div>
     <aside class="mast-zm" id="mastZm" hidden aria-labelledby="mzTitle">
       <div class="mz-head">
-        <h2 id="mzTitle">זמני היום</h2>
+        <div class="mz-ttl"><h2 id="mzTitle">זמני היום</h2><p class="mz-date" id="mzDate"></p></div>
         <label class="sr" for="mzLoc">מיקום</label>
         <select id="mzLoc"></select>
         <button type="button" class="mz-geo" id="mzGeo" aria-label="בחירת המיקום הקרוב אליי" title="המיקום הקרוב אליי"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></button>
       </div>
-      <p class="mz-date" id="mzDate"></p>
       <dl class="mz-times" id="mzTimes"></dl>
       <a class="mz-more" href="#zmanim"><span id="mzShab"></span><b>לכל הזמנים והמיקומים</b></a>
     </aside>
@@ -1254,7 +1270,7 @@ function renderMastZm(){
   if (!Z || !zmInRange(iso)){ $("mastZm").hidden = true; return; }
   if (!Z.daily[myLoc]) myLoc = Z.daily["ירושלים"] ? "ירושלים" : Z.locations[0];
   $("mzLoc").innerHTML = Z.locations.map(l => `<option${l===myLoc?" selected":""}>${esc(l)}</option>`).join("");
-  $("mzDate").innerHTML = zmLabel(iso).replace(/<\/?b>/g, "");
+  $("mzDate").textContent = zmLabel(iso).replace(/<\/?b>/g, "").split(" · ")[0].split(", ").pop();
   const r = zmRow(myLoc, iso), i = k => Z.cols.indexOf(k) + 2;
   $("mzTimes").innerHTML = [["sunrise","זריחה"],["shema","סוף ק״ש"],["sunset","שקיעה"],["tzeit","צאת הכוכבים"]]
     .map(([k,n]) => `<div${k==="sunset"?' class="hl"':""}><dt>${n}</dt><dd>${r ? r[i(k)] : "–"}</dd></div>`).join("");

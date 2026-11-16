@@ -70,6 +70,9 @@ h1 span{font-weight:500;color:var(--mast-muted);font-size:.52em;display:block;ma
 .mast-opts{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 18px;margin-top:-6px;max-width:760px}
 .mz-ttl{flex:1;min-width:0}
 .mast-zm{max-width:100%;background:color-mix(in srgb,var(--mast) 72%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid color-mix(in srgb,var(--mast-ink) 18%,transparent);border-radius:16px;padding:9px 12px 8px;color:var(--mast-ink);display:grid;gap:6px;box-shadow:0 10px 28px rgba(0,0,0,.25)}
+.mz-line{display:none}
+.mz-body{display:grid;gap:6px}
+.menu-fs{display:none}
 .mz-head{display:flex;align-items:center;gap:8px}
 .mz-head h2{margin:0;font-family:var(--display);font-size:1.05rem;line-height:1.2}
 .mz-head select{font:inherit;font-weight:700;font-size:.92rem;color:var(--mast-ink);background:color-mix(in srgb,var(--mast-ink) 10%,transparent);border:1px solid color-mix(in srgb,var(--mast-ink) 22%,transparent);border-radius:9px;padding:4px 8px;max-width:150px}
@@ -460,6 +463,27 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
   .fresh-head{margin-bottom:12px}
   .fresh-sub{display:none}
 }
+/* phones: a short masthead */
+@media (max-width:760px){
+  .mast .wrap{padding-block:10px 12px;gap:8px}
+  .mast .side{display:none}
+  .mast .stats{display:none}
+  h1{font-size:1.6rem}
+  h1 span{display:none}
+  .mast-opts{margin-top:-2px}
+  .mast-zm{padding:0;border-radius:12px;gap:0;overflow:hidden}
+  .mz-line{display:flex;align-items:center;gap:8px;width:100%;font:inherit;font-size:.92rem;color:var(--mast-muted);background:none;border:0;padding:9px 12px;cursor:pointer;text-align:start}
+  .mz-line b{color:var(--mast-ink);font-weight:700}
+  .mz-line > svg:first-child{width:17px;height:17px;color:var(--gold);flex:none}
+  .mz-line span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mz-line .chev{width:18px;height:18px;flex:none;transition:transform .2s}
+  .mast-zm.open .mz-line .chev{transform:rotate(180deg)}
+  .mz-body{display:none;padding:0 12px 10px}
+  .mast-zm.open .mz-body{display:grid}
+  .menu-fs{display:flex;align-items:center;gap:8px;padding:6px 10px;color:var(--mast-ink);font-weight:600}
+  .menu-fs span{flex:1}
+  .topnav .menu .menu-fs button{width:auto;min-width:44px;padding:6px 10px;border:1px solid color-mix(in srgb,var(--mast-ink) 30%,transparent);justify-content:center}
+}
 @media (max-width:560px){
   .ftiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .tile-body{padding:10px;gap:2px 8px}
@@ -521,6 +545,7 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
       <li><a href="https://forms.gle/YJrq9C3aW2BZScJT6" data-fb="ask" target="_blank" rel="noopener">שאלו את הרב</a></li>
       <li><a href="https://forms.gle/Srpsau5Nsxe7kv6t7" data-fb target="_blank" rel="noopener">משוב</a></li>
       <li><a href="https://chat.whatsapp.com/DMLsh3eHqD1IAdnLA5AYez" target="_blank" rel="noopener">קבוצת הוואטסאפ</a></li>
+      <li class="menu-fs"><span>גודל טקסט</span><button type="button" data-fs="down" aria-label="הקטנת טקסט">א-</button><button type="button" data-fs="up" aria-label="הגדלת טקסט">א+</button></li>
       <li><button type="button" class="menu-search" id="menuSearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg><span>חיפוש</span></button></li>
     </ul>
   </div>
@@ -638,6 +663,8 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
     <p class="stats" id="stats"></p>
     </div>
     <aside class="mast-zm" id="mastZm" hidden aria-labelledby="mzTitle">
+      <button type="button" class="mz-line" id="mzLine" aria-expanded="false" aria-controls="mzBody"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span id="mzLineText"></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="mz-body" id="mzBody">
       <div class="mz-head">
         <div class="mz-ttl"><h2 id="mzTitle">זמני היום</h2><p class="mz-date" id="mzDate"></p></div>
         <label class="sr" for="mzLoc">מיקום</label>
@@ -646,6 +673,7 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
       </div>
       <dl class="mz-times" id="mzTimes"></dl>
       <a class="mz-more" href="#zmanim"><span id="mzShab"></span><b>לכל הזמנים והמיקומים</b></a>
+      </div>
     </aside>
   </div>
   <div class="thread" aria-hidden="true"></div>
@@ -1312,6 +1340,11 @@ fbDlg.addEventListener("close", ()=>{ document.body.classList.remove("dlg-open")
 })();
 
 // ---------- top menu ----------
+document.querySelector(".menu-fs").addEventListener("click", e => {
+  const b = e.target.closest("[data-fs]"); if (!b) return;
+  e.stopPropagation();
+  fs = b.dataset.fs === "up" ? Math.min(22, fs+1) : Math.max(13, fs-1); applyFs();
+});
 // fold the menu into the "תפריט" button whenever it does not fit on one line (narrow screen, zoom, larger text)
 function fitNav(){
   const bar = document.querySelector(".topnav"), inner = bar.querySelector(".topnav-in");
@@ -1426,8 +1459,13 @@ function renderMastZm(){
     const [a,b] = evLabels(e), [ti, to] = e.times[myLoc];
     $("mzShab").textContent = `${evTitle(e).split(" · ")[0]}: ${ti ? `${a} ${ti} · ` : ""}${b} ${to}`;
   } else $("mzShab").textContent = "";
+  $("mzLineText").innerHTML = `<b>${esc(myLoc)}</b> · שקיעה <b>${r ? r[i("sunset")] : "–"}</b> · צאת הכוכבים <b>${r ? r[i("tzeit")] : "–"}</b>`;
   $("mastZm").hidden = false;
 }
+$("mzLine").addEventListener("click", () => {
+  const open = !$("mastZm").classList.contains("open");
+  $("mastZm").classList.toggle("open", open); $("mzLine").setAttribute("aria-expanded", open);
+});
 $("mzLoc").addEventListener("change", e => { myLoc = e.target.value; store("bm-loc", myLoc); renderMastZm(); });
 function locate(quiet){
   if (!navigator.geolocation) return;

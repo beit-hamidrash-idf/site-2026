@@ -19,6 +19,7 @@
   --display:"Assistant","Segoe UI",Arial,sans-serif;
   --body:"Assistant","Segoe UI",Arial,sans-serif;
   --gold:#E2B33C; --fresh-a:#16365F; --fresh-b:#1D5BA6; --fresh-ink:#FFFFFF; --fresh-muted:#C9D8EE;
+  --media-bg:#EDE3CC; --media-line:#D9C79C;
   --fs:16px;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -26,13 +27,13 @@
   --accent:#6FA4E6; --accent-soft:#18283E; --accent-ink:#0D141E;
   --mast:#0A1019; --mast-ink:#EEF2F8; --mast-muted:#8E9CB2; --thread:#4F8EDB;
   --pdf:#F08A80; --pdf-soft:#3A1E1C; --word:#8DB6F0; --word-soft:#18283E;
-  --mark:#6B5A12; --mark-ink:#FFF6D2; --wa-ink:#4FD38A; --gold:#D9A93A; --fresh-a:#0F2440; --fresh-b:#173F70; --fresh-ink:#F2F6FC; --fresh-muted:#A9BCD6; color-scheme:dark}}
+  --mark:#6B5A12; --mark-ink:#FFF6D2; --wa-ink:#4FD38A; --gold:#D9A93A; --fresh-a:#0F2440; --fresh-b:#173F70; --fresh-ink:#F2F6FC; --fresh-muted:#A9BCD6; --media-bg:#1E1A12; --media-line:#3A3020; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0D141E; --surface:#141D2A; --ink:#E6EBF2; --muted:#98A5B8; --line:#25324A;
   --accent:#6FA4E6; --accent-soft:#18283E; --accent-ink:#0D141E;
   --mast:#0A1019; --mast-ink:#EEF2F8; --mast-muted:#8E9CB2; --thread:#4F8EDB;
   --pdf:#F08A80; --pdf-soft:#3A1E1C; --word:#8DB6F0; --word-soft:#18283E;
-  --mark:#6B5A12; --mark-ink:#FFF6D2; --wa-ink:#4FD38A; --gold:#D9A93A; --fresh-a:#0F2440; --fresh-b:#173F70; --fresh-ink:#F2F6FC; --fresh-muted:#A9BCD6; color-scheme:dark}
+  --mark:#6B5A12; --mark-ink:#FFF6D2; --wa-ink:#4FD38A; --gold:#D9A93A; --fresh-a:#0F2440; --fresh-b:#173F70; --fresh-ink:#F2F6FC; --fresh-muted:#A9BCD6; --media-bg:#1E1A12; --media-line:#3A3020; color-scheme:dark}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -354,7 +355,7 @@ footer{color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padd
 footer a{color:var(--muted)}
 
 /* media: YouTube channel + Spotify podcast */
-.media{margin-block:0 50px;scroll-margin-top:16px}
+.media{margin-block:0 50px;scroll-margin-top:16px;padding-block:30px 36px;background:var(--media-bg);box-shadow:0 0 0 100vmax var(--media-bg);clip-path:inset(0 -100vmax)}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 .media h2{font-family:var(--display);font-size:1.5rem;margin:0 0 4px}
 .media h3{font-family:var(--display);font-size:1.2rem;margin:26px 0 4px}
@@ -452,6 +453,11 @@ dialog#vidDlg::backdrop{background:rgba(8,14,24,.75)}
 .lessons-sub{display:none}
 /* while searching, the results come right under the search box, and a search bar stays on top of them */
 body.searching #fresh,body.searching #media{display:none}
+.searchnote{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;margin-top:14px;padding:10px 14px;border-radius:12px;background:var(--accent-soft);color:var(--ink)}
+.searchnote[hidden]{display:none}
+.searchnote span{font-weight:600;overflow-wrap:anywhere}
+.searchnote button{font:inherit;font-weight:700;display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:7px 16px;cursor:pointer}
+.searchnote button svg{width:16px;height:16px}
 .rsearch{position:sticky;z-index:25;top:58px;margin:10px 0 0;padding:8px 0;background:var(--bg);display:flex;align-items:center;gap:8px}
 .rsearch[hidden]{display:none}
 .rsearch svg{position:absolute;inset-inline-start:12px;width:19px;height:19px;color:var(--muted);pointer-events:none}
@@ -716,6 +722,7 @@ body.searching #fresh,body.searching #media{display:none}
       <button type="button" data-v="folders" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2.5h8.5A1.5 1.5 0 0 1 21 9v9.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/></svg>לפי תיקיות</button>
     </div>
   </div>
+  <div class="searchnote" id="searchNote" hidden><span id="searchNoteT"></span><button type="button" id="backNorm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>חזרה לתצוגה הרגילה</button></div>
   <form class="rsearch" id="rsearch" role="search" hidden>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
     <input id="q2" type="search" autocomplete="off" aria-label="חיפוש במאגר">
@@ -1201,11 +1208,17 @@ function syncSearchBar(){
   document.body.classList.toggle("searching", on);
   if ($("q2").value !== $("q").value && document.activeElement !== $("q2")) $("q2").value = $("q").value;
   $("rsearch").hidden = !(on && mastOff);
+  $("searchNote").hidden = !on;
+  if (on) $("searchNoteT").textContent = `מוצגות תוצאות חיפוש עבור „${S.q.trim()}”`;
   $("rsearch").style.top = (document.querySelector(".topnav")?.offsetHeight || 58) + "px";
 }
 new IntersectionObserver(([e])=>{ mastOff = !e.isIntersecting; syncSearchBar(); }, {rootMargin:"-60px 0px 0px 0px"}).observe($("searchForm"));
 $("q2").addEventListener("input", ()=>{ $("q").value = $("q2").value; $("q").dispatchEvent(new Event("input")); });
 $("rsearch").addEventListener("submit", e=>{ e.preventDefault(); $("q2").blur(); });
+function backToNormal(){ $("q2").value = ""; $("clear").click(); $("q").blur(); window.scrollTo({top:0}); }
+$("backNorm").addEventListener("click", backToNormal);
+$("q").addEventListener("keydown", e=>{ if (e.key === "Escape" && S.q) backToNormal(); });
+$("q2").addEventListener("keydown", e=>{ if (e.key === "Escape") backToNormal(); });
 $("clear2").addEventListener("click", ()=>{ $("q2").value = ""; $("clear").click(); window.scrollTo({top:0}); });
 function syncFmt(){ $("fmt").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.f===S.fmt)); }
 $("fmt").addEventListener("click", e=>{
@@ -1364,7 +1377,7 @@ fbDlg.addEventListener("close", ()=>{ document.body.classList.remove("dlg-open")
   bar.addEventListener("click", e => {
     const b = e.target.closest("[data-tab]"); if (!b) return;
     const tab = b.dataset.tab;
-    if (tab === "home"){ e.preventDefault(); if (location.hash) history.pushState("", "", location.pathname + location.search); window.dispatchEvent(new HashChangeEvent("hashchange")); window.scrollTo({top:0}); }
+    if (tab === "home"){ e.preventDefault(); if (S.q) backToNormal(); if (location.hash) history.pushState("", "", location.pathname + location.search); window.dispatchEvent(new HashChangeEvent("hashchange")); window.scrollTo({top:0}); }
     if (tab === "search"){ if (location.hash){ history.pushState("", "", location.pathname + location.search); window.dispatchEvent(new HashChangeEvent("hashchange")); } window.scrollTo({top:0}); $("q").focus(); }
     if (tab === "media"){ e.preventDefault(); if (location.hash !== "#media"){ history.pushState("", "", "#media"); window.dispatchEvent(new HashChangeEvent("hashchange")); }
       requestAnimationFrame(() => $("media").scrollIntoView({block:"start"})); }

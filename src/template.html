@@ -491,6 +491,25 @@ body.searching #fresh,body.searching #media{display:none}
   .fresh-head{margin-bottom:12px}
   .fresh-sub{display:none}
 }
+/* phones: a low "new" strip */
+@media (max-width:760px){
+  .fresh{padding:10px 12px 12px;margin-top:12px}
+  .fresh-head{margin-bottom:8px}
+  .fresh h2{font-size:1.12rem}
+  .fresh-badge{font-size:.72rem;padding:3px 9px}
+  .fresh-list{grid-auto-columns:minmax(140px,44%);gap:8px;padding-bottom:4px}
+  .fresh-card{padding:8px 10px;gap:6px;border-radius:10px}
+  .fresh-card:has(.fresh-cover){padding-top:8px}
+  .fresh-cover{margin:-8px -10px 0;aspect-ratio:2/1;border-radius:8px 8px 0 0}
+  .fresh-card small{font-size:.7rem;margin-bottom:1px}
+  .fresh-card h3{font-size:.9rem;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .fresh-card .files .f{padding:4px 9px;font-size:.8rem}
+  .fresh::after{height:3px}
+  .lessons-card .fresh-cover{aspect-ratio:2/1}
+  .lessons-card small{display:none}
+  .lessons-card .files a{padding:5px 10px;font-size:.8rem}
+  .fresh-card .play,.lessons-card .fresh-cover svg{transform:scale(.7)}
+}
 /* phones: a short masthead */
 @media (max-width:760px){
   .mast .wrap{padding-block:10px 12px;gap:8px}

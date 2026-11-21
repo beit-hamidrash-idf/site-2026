@@ -1,5 +1,7 @@
 import json, re, sys, collections
 items = json.load(open(sys.argv[1]))
+PRIVATE_FOLDER = 'פנימי – לא לפרסום'  # internal/classified files: never published on the site
+items = [it for it in items if PRIVATE_FOLDER not in it['path']]
 NEW_FOLDER = 'חדש'  # top-level Drive folder whose files are featured at the top of the page
 new_items = [it for it in items if it['path'][:1] == [NEW_FOLDER]]
 items = [it for it in items if it['path'][:1] != [NEW_FOLDER]]

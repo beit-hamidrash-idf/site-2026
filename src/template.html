@@ -953,7 +953,7 @@ function topicTree(){
 function renderTopics(){
   const {pool, tree} = topicTree();
   const items = [`<li><button type="button" data-t="" aria-pressed="${S.topic===""}">הכול<span class="n">${pool.length}</span></button></li>`];
-  const entries = [...tree.entries()].sort((a,b)=>b[1].n-a[1].n);
+  const entries = [...tree.entries()].sort((a,b)=>(/תורת המחנה/.test(b[0])?1:0)-(/תורת המחנה/.test(a[0])?1:0) || b[1].n-a[1].n);
   for (const [name, t] of entries){
     items.push(`<li><button type="button" data-t="${esc(name)}" aria-pressed="${S.topic===name}">${esc(name)}<span class="n">${t.n}</span></button></li>`);
     if (S.topic && (S.topic===name || S.topic.startsWith(name+"\u0001")) && t.sub.size>1){
@@ -1099,6 +1099,8 @@ function results(){
   const sort = S.sort === "rel" && !toks.length ? "new" : S.sort;
   out.sort((A,B)=>{
     const a=A[1], b=B[1];
+    const ta=tmRank(a), tb=tmRank(b);
+    if (ta!==tb && a.c===b.c) return ta-tb;
     if (sort==="rel") return B[0]-A[0] || byNum(a,b,-1);
     if (sort==="az") return a.t.localeCompare(b.t,"he");
     if (sort==="old") return byNum(a,b,1);
@@ -1108,6 +1110,14 @@ function results(){
   return {list: out.map(x=>x[1]), toks};
 }
 
+// Torat HaMachane books always come first among the books, by volume (א–ד, then the abridged one)
+function tmRank(d){
+  const where = [d.p.join(" "), d.o||"", d.t].join(" ");
+  if (!/תורת המחנה/.test(where)) return 99;
+  if (/קיצור/.test(where)) return 10;
+  const m = where.match(/תורת המחנה\s*([א-ד])(?![א-ת])/);
+  return m ? "אבגד".indexOf(m[1]) : 10;
+}
 function rowHTML(d, toks){
   const lead = d.n
     ? `<div class="num" aria-label="גיליון ${d.n}"><small>גיליון</small>${d.n}</div>`

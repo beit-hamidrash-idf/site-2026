@@ -62,7 +62,7 @@ for it in items:
     path = it['path']
     coll = path[0]
     topic = [p for p in path[1:] if p not in ('PDF', 'Word')]
-    b = base(it['name'])
+    b = re.sub(r'^עותק של\s+', '', base(it['name']))
     key = (coll, tuple(topic), re.sub(r'[\s_]+', '', b))
     if coll == 'מאגר דפי והגית בו':
         title, num, date = parse_vehagit(b)

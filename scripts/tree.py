@@ -1,6 +1,6 @@
 import json, re, sys
 items = json.load(open(sys.argv[1]))
-ROOT = "1GNB_nxa9GEel6ThtYqLgL0yHyt8_EMz4"
+ROOT = "14PifxaezRR8-LCZtONNsUS1iPUlkmITk"
 nodes = {(): {"n": "בית המדרש להלכה", "id": ROOT, "k": [], "f": []}}
 clean = lambda s: re.sub(r'[‎‏‪-‮]', '', s).strip()
 for it in sorted(items, key=lambda x: len(x['path'])):

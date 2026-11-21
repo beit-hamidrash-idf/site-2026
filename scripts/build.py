@@ -2,9 +2,20 @@ import json, re, sys, collections
 items = json.load(open(sys.argv[1]))
 PRIVATE_FOLDER = 'פנימי – לא לפרסום'  # internal/classified files: never published on the site
 items = [it for it in items if PRIVATE_FOLDER not in it['path']]
-NEW_FOLDER = 'חדש'  # top-level Drive folder whose files are featured at the top of the page
+import datetime
+NEW_FOLDER = 'חדש'  # the old repository's "new" folder: its files stay featured at the top of the page
+# From this date on, every file added anywhere in the repository is also featured for a week,
+# then stays only in its own folder (the site is rebuilt every day, so it drops off by itself)
+AUTO_NEW_FROM = datetime.date(2026, 11, 23)
+AUTO_NEW_DAYS = 7
+today = datetime.date.today()
+def recent(it):
+    if it['folder'] or not it.get('m') or it['path'][:1] == [NEW_FOLDER]: return False
+    d = datetime.date.fromisoformat(it['m'])
+    return d >= AUTO_NEW_FROM and (today - d).days < AUTO_NEW_DAYS
 new_items = [it for it in items if it['path'][:1] == [NEW_FOLDER]]
-items = [it for it in items if it['path'][:1] != [NEW_FOLDER]]
+auto_new = [it for it in items if recent(it)]
+items = [it for it in items if it['path'][:1] != [NEW_FOLDER] and it['path']]
 SKIP_EXT = ('.txt', '.lnk')
 def fmt_of(name):
     n = name.lower().strip()
@@ -124,11 +135,12 @@ def new_title(name):
     series = parts.pop(0) if len(parts) > 1 else ''
     return series, ' · '.join(parts) or b
 feat = collections.OrderedDict()
-for it in sorted(new_items, key=lambda x: x['name']):
+for it in sorted(auto_new, key=lambda x: (x['m'], x['name']), reverse=True) + sorted(new_items, key=lambda x: x['name']):
     if it['folder'] or it['name'].lower().endswith(SKIP_EXT): continue
     m = re.search(r'/d/([^/]+)', it['url'])
     if not m: continue
     series, title = new_title(it['name'])
+    if not series and it['path'] != [NEW_FOLDER]: series = clean_folder(it['path'][-1])
     d = feat.setdefault(re.sub(r'[^א-ת0-9a-zA-Z]', '', series + title), {'t': title, 's': series, 'f': {}})
     d['f'].setdefault(fmt_of(it['name']), m.group(1))
 feat = [{k: v for k, v in d.items() if v} for d in feat.values()]

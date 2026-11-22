@@ -68,7 +68,9 @@ for it in items:
         title, num, date = parse_vehagit(b)
     else:
         title, num, date = b, None, None
-        title = re.sub(r'^(הנחיות הלכתיות|הלכה כסדרה|לוח דינים ומנהגים|תורת המחנה [א-ד]׳?|\'?) \| ', '', title) or title
+        title = re.sub(r'^(הנחיות הלכתיות|הלכה כסדרה|לוח דינים ומנהגים|\'?) \| ', '', title) or title
+        # Torat HaMachane volumes keep their name: "תורת המחנה א׳ | ימי חול"
+        title = re.sub(r'^תורת המחנה ([א-ד])[׳\']?\s*\|\s*', r'תורת המחנה \1׳ | ', title)
     d = docs.setdefault(key, {'t': heb(title), 'c': coll, 'p': [clean_folder(x) for x in topic], 'n': num, 'd': heb(date) if date else None, 'f': {}, 'o': heb(b)})
     fid = re.search(r'/d/([^/]+)', it['url']).group(1)
     d['f'].setdefault(fmt_of(it['name']), fid)

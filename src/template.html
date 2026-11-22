@@ -1697,7 +1697,7 @@ applyFs();
   const lessons = (hv.length || he.length) ? `<li class="fresh-card lessons-card">
       <a class="fresh-cover" href="#media" tabindex="-1" aria-hidden="true">${hv.length ? `<img src="https://i.ytimg.com/vi/${esc(hv[0].id)}/hqdefault.jpg" alt="" loading="lazy">` : ""}<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
       <div><small>שיעורים מוקלטים · ודברת בם</small><h3>שיעורים לחנוכה</h3><p class="lessons-sub">${parts}: נרות חנוכה לחיילים, הדלקה בבסיס ובשטח, נרות חשמליים ועוד</p></div>
-      <div class="files"><a class="f media" href="#media">${ICON.play || ""}לצפייה ולהאזנה</a></div></li>` : "";
+      <div class="files"><a class="f media" href="#media">${ICON.play || ""}להאזנה</a></div></li>` : "";
   if (!NEW.length && !lessons) return;
   $("freshList").innerHTML = lessons + NEW.map(d=>{
     const links = ["pdf","word"].filter(f=>d.f[f]).map(f=>

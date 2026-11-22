@@ -1,6 +1,8 @@
 <title>בית המדרש להלכה</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="icon" href="favicon.ico?v=2" sizes="any">
+<!-- usage statistics (GoatCounter: no cookies, no personal data) -->
+<script data-goatcounter="https://beit-hamidrash.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="icon" type="image/png" href="icon-192.png?v=2">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
 <meta name="theme-color" content="#132033">
@@ -1711,4 +1713,34 @@ applyFs();
 
 renderTabs(); renderTopics(); setView(VIEW);
 if (docsMode) docsRoute();
+// ---------- usage statistics: which files are opened, what people search for, which sections they visit ----------
+(function(){
+  const gc = (path, title) => { try{ if (window.goatcounter && goatcounter.count) goatcounter.count({path, title: title || path, event:true}); }catch(e){} };
+  document.addEventListener("click", e=>{
+    const a = e.target.closest("a[href]"); if (!a) return;
+    const h = a.getAttribute("href");
+    const id = (h.match(/\/(?:file|document|spreadsheets|presentation)\/d\/([^/?#]+)/) || h.match(/\/folders\/([^/?#]+)/) || [])[1];
+    if (id){
+      const row = a.closest("li");
+      const name = (row && row.querySelector("h3, b, .title") || a).textContent.trim().replace(/\s+/g," ").slice(0,120);
+      const kind = a.classList.contains("pdf") ? "PDF" : a.classList.contains("word") ? "Word" : /folders/.test(h) ? "תיקייה" : "קובץ";
+      gc(`פתיחה/${kind}/${name}`, `${name} (${kind})`);
+    } else if (/youtube\.com|youtu\.be/.test(h)) gc("יציאה/יוטיוב", "יוטיוב");
+    else if (/spotify\.com/.test(h)) gc("יציאה/ספוטיפיי", "ספוטיפיי");
+    else if (/chat\.whatsapp\.com/.test(h)) gc("יציאה/וואטסאפ", "קבוצת הוואטסאפ");
+    else if (a.dataset.fb) gc(`טופס/${a.dataset.fb === "ask" ? "שאלו את הרב" : "משוב"}`);
+  }, true);
+  // a search is counted once the user stops typing for two seconds
+  let t, last = "";
+  const onType = ()=>{ clearTimeout(t); t = setTimeout(()=>{
+    const q = $("q").value.trim().replace(/\s+/g," ");
+    if (q.length < 2 || q === last) return; last = q;
+    gc(`חיפוש/${q.slice(0,60)}`, `חיפוש: ${q.slice(0,60)}`);
+  }, 2000); };
+  $("q").addEventListener("input", onType);
+  // sections reached through the menu (#zmanim, #media, #docs ...)
+  const seen = new Set();
+  const onHash = ()=>{ const h = location.hash.slice(1); if (h && !seen.has(h)){ seen.add(h); gc(`מדור/${h}`); } };
+  window.addEventListener("hashchange", onHash); onHash();
+})();
 </script>

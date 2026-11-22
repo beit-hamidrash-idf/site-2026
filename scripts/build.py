@@ -13,8 +13,14 @@ def recent(it):
     if it['folder'] or not it.get('m') or it['path'][:1] == [NEW_FOLDER]: return False
     d = datetime.date.fromisoformat(it['m'])
     return d >= AUTO_NEW_FROM and (today - d).days < AUTO_NEW_DAYS
+# Files featured by hand until a set date (regex on the file name, last day shown)
+PINNED_NEW = [
+    (r'והגית בו גליון 363\b', datetime.date(2026, 11, 29)),
+]
+def pinned(it):
+    return not it['folder'] and any(re.search(rx, it['name']) and today <= until for rx, until in PINNED_NEW)
 new_items = [it for it in items if it['path'][:1] == [NEW_FOLDER]]
-auto_new = [it for it in items if recent(it)]
+auto_new = [it for it in items if recent(it) or pinned(it)]
 items = [it for it in items if it['path'][:1] != [NEW_FOLDER] and it['path']]
 SKIP_EXT = ('.txt', '.lnk')
 def fmt_of(name):
@@ -142,6 +148,9 @@ for it in sorted(auto_new, key=lambda x: (x['m'], x['name']), reverse=True) + so
     m = re.search(r'/d/([^/]+)', it['url'])
     if not m: continue
     series, title = new_title(it['name'])
+    if it['path'][:1] == ['מאגר דפי והגית בו']:
+        t, num, _ = parse_vehagit(base(it['name']))
+        series, title = 'והגית בו', (f'גיליון {num} · ' if num else '') + heb(t)
     if not series and it['path'] != [NEW_FOLDER]: series = clean_folder(it['path'][-1])
     d = feat.setdefault(re.sub(r'[^א-ת0-9a-zA-Z]', '', series + title), {'t': title, 's': series, 'f': {}})
     d['f'].setdefault(fmt_of(it['name']), m.group(1))

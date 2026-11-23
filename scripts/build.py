@@ -9,7 +9,9 @@ NEW_FOLDER = 'חדש'  # the old repository's "new" folder: its files stay featu
 AUTO_NEW_FROM = datetime.date(2026, 11, 23)
 AUTO_NEW_DAYS = 7
 today = datetime.date.today()
+AUTO_NEW_ENABLED = False  # switched off until further notice: only the old "new" folder and PINNED_NEW are featured
 def recent(it):
+    if not AUTO_NEW_ENABLED: return False
     if it['folder'] or not it.get('m') or it['path'][:1] == [NEW_FOLDER]: return False
     d = datetime.date.fromisoformat(it['m'])
     return d >= AUTO_NEW_FROM and (today - d).days < AUTO_NEW_DAYS
